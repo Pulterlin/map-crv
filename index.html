@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>园区地址导航</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body { 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .page-title {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .page-description {
+            color: #34495e;
+            margin-bottom: 20px;
+            font-size: 16px;
+            text-align: center;
+        }
+        /* 新增：主内容容器（地图+右侧文字） */
+        .main-content {
+            display: flex;
+            width: 100%;
+            max-width: 1200px; /* 总宽度可调整 */
+            gap: 20px; /* 地图和文字区域的间距 */
+            align-items: flex-start;
+        }
+        .map-box {
+            position: relative;
+            width: 65%; /* 地图占比 */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background: #fff;
+        }
+        /* 新增：右侧文字区域 */
+        .right-text {
+            width: 35%; /* 文字区域占比 */
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-height: 300px; /* 最小高度，避免内容过少时变形 */
+        }
+        .map-img { 
+            width: 100%; 
+            height: auto; 
+            display: block;
+        }
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            background: rgba(66, 153, 225, 0);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            min-width: 40px;
+            min-height: 40px;
+        }
+        .hotspot:hover {
+            background: rgba(66, 153, 225, 0.1);
+            transform: scale(1);
+        }
+        /* 弹窗样式 */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* 恢复半透明背景，避免弹窗和背景混淆 */
+            z-index: 999;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 10px;
+            overflow-y: auto;
+        }
+        .popup-content {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3); /* 恢复阴影，突出弹窗 */
+            background: #fff;
+            max-width: 90vw;
+            width: 100%;
+        }
+        .popup-header {
+            padding: 12px 15px;
+            background: #2d6a4f;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .popup-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .popup-img-container {
+            width: 100%;
+        }
+        .popup-img { 
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+        .popup-text {
+            padding: 15px;
+            font-size: 16px;
+            color: #333;
+            display: none;
+        }
+        .popup-text.show {
+            display: block;
+            border-top: 1px solid #eee;
+        }
+        .close {
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2); /* 恢复关闭按钮背景，增强可点击性 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .close:hover {
+            background: rgba(255,255,255,0.3); /* 恢复悬停效果 */
+        }
+        /* 响应式调整：屏幕较小时，文字区域在地图下方 */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .map-box, .right-text {
+                width: 100%; /* 移动端占满宽度 */
+            }
+            .page-title { font-size: 20px; }
+            .page-description { font-size: 14px; }
+            .popup-text { font-size: 14px; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">深圳生鲜园区导航</h1>
+    <p class="page-description">点击地点查看详情</p>
+
+    <!-- 新增：主内容容器，包含地图和右侧文字 -->
+    <div class="main-content">
+        <div class="map-box">
+            <img src="主地图.jpg" class="map-img" alt="园区地图">
+            
+            <!-- 热区保持不变 -->
+            <div class="hotspot" style="top: 75%; left: 38%; width: 10%; height: 15%;" 
+                 data-img="单据室.jpg" data-name="单据室"></div>
+            
+            <div class="hotspot" style="top: 75%; left: 18%; width: 6%; height: 20%;" 
+                 data-img="D栋冷冻库.jpg" data-name="D栋冷冻库" data-text=""></div>
+            
+            <div class="hotspot" style="top: 20%; left: 85%; width: 6%; height: 25%;" 
+                 data-img="C栋冷冻库.jpg" data-name="C栋冷冻库" data-text=""></div>
+            
+            <div class="hotspot" style="top: 13%; left: 55%; width: 20%; height: 10%;" 
+                 data-img="办公楼.jpg" data-name="办公楼"></div>
+            
+            <div class="hotspot" style="top: 50%; left: 18%; width: 20%; height: 8%;" 
+                 data-img="A栋1楼前穿堂.jpg" data-name="A栋1楼前穿堂" data-text=""></div>
+            
+            <div class="hotspot" style="top: 28%; left: 18%; width: 20%; height: 8%;" 
+                 data-img="A栋1楼后穿堂.jpg" data-name="A栋1楼后穿堂" data-text=""></div>
+            
+            <div class="hotspot" style="top: 35%; left: 10%; width: 8%; height: 15%;" 
+                 data-img="洗筐区.jpg" data-name="洗筐区"></div>
+            
+            <!-- 通行道热区 -->
+            <div class="hotspot" style="top: 50%; left: 42%; width: 6%; height: 20%;" 
+                 data-img="通行道1.jpg" data-name="通行道1"></div>
+            
+            <div class="hotspot" style="top: 60%; left: 20%; width: 15%; height: 6%;" 
+                 data-img="通行道2.jpg" data-name="通行道2"></div>
+            
+            <div class="hotspot" style="top: 30%; left: 42%; width: 6%; height: 15%;" 
+                 data-img="通行道3.jpg" data-name="通行道3"></div>
+            
+            <div class="hotspot" style="top: 23%; left: 55%; width: 20%; height: 5%;" 
+                 data-img="通行道4.jpg" data-name="通行道4"></div>
+        </div>
+
+        <!-- 右侧文字区域：在这里添加你的文字内容 -->
+        <div class="right-text">
+            <!-- 以下是示例内容，你可以替换成自己的文字 -->
+            <h3>卸货码头</h3>
+            <p>常温A17、A19外扩码头 位于A栋1楼前穿堂</p>	
+            <p>冷藏A3-A12      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   位于A栋1楼前穿堂</p>
+			<p>冷冻D6-D8       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   位于D栋冷冻库</p>
+            <br>
+            <h3>联系方式</h3>
+            <p>DC负责人：徐先生 13510195897</p>
+            <p>收货部负责人：黄先生 15017911001</p>
+			<p>收货部电话：0755-89355300</p>
+			<p>第三方业务联系：成小姐 13798207749</p>
+			<p>投诉与建议：陈先生 18219206635</p>
+            <!-- 到此结束，替换成你的内容即可 -->
+        </div>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3 class="popup-title" id="popupTitle"></h3>
+                <span class="close" id="closeBtn">&times;</span>
+            </div>
+            <div class="popup-img-container">
+                <img src="" class="popup-img" id="popupImg" alt="详情图">
+            </div>
+            <div class="popup-text" id="popupText"></div>
+        </div>
+    </div>
+
+    <script>
+        const hotspots = document.querySelectorAll('.hotspot');
+        const popup = document.getElementById('popup');
+        const popupTitle = document.getElementById('popupTitle');
+        const popupImg = document.getElementById('popupImg');
+        const popupText = document.getElementById('popupText');
+        const closeBtn = document.getElementById('closeBtn');
+
+        hotspots.forEach(hot => {
+            hot.addEventListener('click', function() {
+                popupTitle.textContent = this.getAttribute('data-name');
+                popupImg.src = this.getAttribute('data-img');
+                
+                const text = this.getAttribute('data-text');
+                if (text) {
+                    popupText.textContent = text;
+                    popupText.classList.add('show');
+                } else {
+                    popupText.classList.remove('show');
+                }
+                
+                popup.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            popup.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) {
+                popup.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>
