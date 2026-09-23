@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#18605A"><meta name="description" content="深圳生鲜园区立体导览，查找建筑、30个卸货码头及现场照片。">
+  <title>深圳生鲜园区 · 立体导览</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/"}}</script>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="./" aria-label="园区导览首页"><span class="brand-mark" aria-hidden="true">▥</span><span><strong>深圳生鲜园区</strong><small>SHENZHEN FRESH FOOD PARK</small></span></a><div class="topbar-right"><span class="location">德信昌科技园 · 清祥路 23 号</span><button id="contact-open" class="text-button">联系园区 ↗</button></div></header>
+  <main class="workspace">
+    <aside class="sidebar" aria-label="地点查找">
+      <div class="sidebar-heading"><span class="eyebrow">EXPLORE THE CAMPUS</span><h1>每一站，清晰可达<span>。</span></h1><p>查找库区、码头与园区服务</p></div>
+      <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索地点 / 码头，如 A17、8号库" autocomplete="off" aria-label="搜索地点或码头"><kbd>/</kbd></label>
+      <div class="filters" aria-label="地点分类"><button class="active" data-filter="all" aria-pressed="true">全部</button><button data-filter="dock" aria-pressed="false">码头</button><button data-filter="cold" aria-pressed="false">冷冻库</button><button data-filter="service" aria-pressed="false">服务</button></div>
+      <div class="list-caption"><span id="list-heading">园区地点</span><span id="result-count"></span></div>
+      <div id="place-list" class="place-list"></div>
+      <div class="sidebar-footer"><span class="status-dot"></span>园区导览<span class="divider">/</span>30 个码头 · 4 个库区</div>
+    </aside>
+    <section class="map-area" aria-label="交互式立体园区地图">
+      <div id="scene" tabindex="0" aria-label="立体地图，使用右侧按钮缩放和旋转；也可在地点列表中选择位置"></div>
+      <div id="labels" aria-hidden="true"></div>
+      <div class="map-heading"><span class="eyebrow">CAMPUS OVERVIEW</span><h2 id="map-title">园区全景</h2><p id="map-subtitle">建筑 · 库区 · 卸货码头</p></div>
+      <div class="view-toggle" aria-label="地图视角"><button id="view-3d" class="active" aria-pressed="true">立体</button><button id="view-top" aria-pressed="false">俯视</button></div>
+      <div class="map-tools" aria-label="地图操作"><button id="zoom-in" title="放大" aria-label="放大">＋</button><button id="zoom-out" title="缩小" aria-label="缩小">−</button><span></span><button id="rotate" title="旋转视角" aria-label="旋转视角">↻</button><button id="reset" title="全园区" aria-label="回到全园区">⌂</button></div>
+      <div class="legend"><span><i class="green"></i>作业区域</span><span><i class="blue"></i>冷冻库</span><span><i class="sand"></i>配套建筑</span></div>
+      <div class="map-hint">拖动旋转 · 滚轮缩放 · 右键平移</div>
+      <div class="map-note">布局示意 · 建筑高度与码头间距非实测</div>
+      <div id="loading" class="loading"><span class="loader"></span><strong>正在准备园区地图</strong><span>让每一个目的地清晰可见</span></div>
+      <div id="map-error" class="map-error" hidden><strong>立体地图暂时无法显示</strong><p>仍可使用地点列表查找码头和查看照片。</p><button id="retry">重新加载地图</button><a href="主地图.jpg" target="_blank" rel="noopener">查看原始参考图 ↗</a></div>
+      <article id="detail" class="detail" hidden aria-label="地点详情"><button id="detail-close" class="close" aria-label="关闭地点详情">×</button><span id="detail-kind" class="eyebrow"></span><h2 id="detail-title"></h2><p id="detail-description"></p><div id="detail-tags" class="detail-tags"></div><div id="dock-picker"></div><button id="photo-button" class="photo-button" hidden><span>查看现场照片</span><span>↗</span></button><p id="photo-note" class="photo-note"></p></article>
+    </section>
+  </main>
+  <dialog id="photo-dialog" class="photo-dialog"><div class="dialog-heading"><h2 id="photo-title">现场照片</h2><button id="photo-close" class="close" aria-label="关闭照片">×</button></div><div class="photo-stage"><p id="photo-status" role="status">正在加载照片…</p><img id="photo" alt="" hidden></div><p class="photo-caption">现场参考照片 · 以实际现场为准</p></dialog>
+  <dialog id="contact-dialog" class="contact-dialog"><div class="dialog-heading"><h2>联系园区</h2><button id="contact-close" class="close" aria-label="关闭联系方式">×</button></div><p class="address">深圳市龙华区龙华街道清湖社区<br>清祥路 23 号 · 德信昌科技园</p><div id="contacts"></div><p class="photo-caption">联系方式沿用原园区页面</p></dialog>
+  <div id="announcement" class="sr-only" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
