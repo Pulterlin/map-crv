@@ -1,4 +1,4 @@
-import {places,docks,allPlaces,contacts,searchPlaces} from './data.js?v=docks-86';
+import {places,docks,allPlaces,contacts,searchPlaces} from './data.js?v=docks-87';
 const $=id=>document.getElementById(id);
 let map=null,selected=null,filter='all',lastTrigger=null;
 const kindNames={building:'园区建筑',dock:'卸货码头',cold:'冷链库区',service:'园区服务',road:'园区道路'};
@@ -32,5 +32,5 @@ for(const dialog of document.querySelectorAll('dialog'))dialog.addEventListener(
 for(const [name,tel]of contacts){const row=document.createElement('div');row.className='contact-row';const label=document.createElement('span');label.textContent=name;const link=document.createElement('a');link.textContent=tel;link.href='tel:'+tel;row.append(label,link);$('contacts').append(row);}
 document.addEventListener('keydown',e=>{if(e.key==='/'&&!/input|textarea/i.test(e.target.tagName)&&!document.querySelector('dialog[open]')){e.preventDefault();$('search').focus();}if(e.key==='Escape'&&!document.querySelector('dialog[open]'))closeDetail();});
 list();
-try{const {createMap}=await import('./map.js?v=docks-86');map=createMap($('scene'),$('labels'),id=>select(id));$('loading').hidden=true;const initial=new URLSearchParams(location.search).get('place');if(initial)select(initial);}
+try{const {createMap}=await import('./map.js?v=docks-87');map=createMap($('scene'),$('labels'),id=>select(id));$('loading').hidden=true;const initial=new URLSearchParams(location.search).get('place');if(initial)select(initial);}
 catch(error){console.error('Map initialization failed',error);$('loading').hidden=true;$('map-error').hidden=false;for(const id of ['zoom-in','zoom-out','rotate','reset','view-top','view-3d'])$(id).disabled=true;}

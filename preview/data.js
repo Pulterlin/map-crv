@@ -31,7 +31,7 @@ const widths=Array.from({length:16},(_,i)=>i<2||i>13?8.5:5.1);
 const total=widths.reduce((a,b)=>a+b,0)+15*.9;
 let cursor=total/2;
 export const docks=widths.map((width,i)=>{const z=cursor-width/2;cursor-=width+.9;return {id:'dock'+(i+1),number:i+1,name:'A'+(i+1)+'号码头',short:String(i+1),kind:'dock',group:'front',x:-37.5,z,y:2.4,width,depth:10,large:i<2||i>13};});
-for(let n=17;n<=30;n++){const leftGroup=n>=27;docks.push({id:'dock'+n,number:n,name:'A'+n+'号码头',short:String(n),kind:'dock',group:'rear',x:38,z:leftGroup?9+(n-27)*13:-52+(n-17)*5.1,y:2.4,width:leftGroup?10.5:4.5,depth:9,large:false});}
+for(let n=17;n<=30;n++){const leftGroup=n>=27;docks.push({id:'dock'+n,number:n,name:'A'+n+'号码头',short:String(n),kind:'dock',group:'rear',x:38,z:leftGroup?31+(n-27)*6.1:-52+(n-17)*5.1,y:2.4,width:leftGroup?5.2:4.5,depth:9,large:false});}
 for(const dock of docks){dock.subtitle=(dock.group==='front'?'前穿堂':'后穿堂')+(dock.large?'·大码头':'');dock.description=dock.group==='front'?'前穿堂'+dock.number+'号码头。编号从充电站端向单据室端递增。':'后穿堂'+dock.number+'号码头，位于'+(dock.number<=26?'17–26':'27–30')+'号分组。';dock.photo=dock.group==='front'?'A栋1楼前穿堂.jpg':'A栋1楼后穿堂.jpg';dock.photoNote='照片为对应穿堂的区域参考，并非该码头单独照片。';dock.tags=[dock.group==='front'?'前穿堂':'后穿堂',dock.group==='front'?(dock.large?'大码头':'小码头'):(dock.number<=26?'17–26号组':'27–30号组')];}
 export const allPlaces=[...places,...docks];
 export const contacts=[['DC负责人·徐先生','13510195897'],['收货部负责人·黄先生','15017911001'],['收货部','0755-89355300'],['第三方业务·成小姐','13798207749'],['投诉与建议·陈先生','18219206635']];

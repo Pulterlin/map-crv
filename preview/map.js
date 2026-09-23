@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {buildings,places,docks,allPlaces,COLORS} from './data.js?v=docks-86';
+import {buildings,places,docks,allPlaces,COLORS} from './data.js?v=docks-87';
 
 export function createMap(container,labelLayer,onSelect){
  const scene=new THREE.Scene();scene.background=new THREE.Color('#eaf0e9');
