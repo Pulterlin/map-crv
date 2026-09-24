@@ -5,3 +5,23 @@ body{background:#f3f7f2}.floor-top-back{font-size:12px;font-weight:700;color:#18
 .door-track{fill:none;stroke:#739b88;stroke-width:1.5}
 .route-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid #dce6dd;background:#f9fbf8}.route-toolbar>strong{font-size:12px;color:#24564c;white-space:nowrap}.route-options{display:flex;gap:5px;flex-wrap:wrap}.route-options button{border:1px solid #cfddd2;background:#fff;padding:6px 11px;border-radius:6px;color:#47665a;font-size:11px;font-weight:700}.route-options button.active{background:#18605a;border-color:#18605a;color:#fff}.route-options button:hover{border-color:#18605a}.route-status{color:#657b70;font-size:10px;line-height:1.4}.route-layer{pointer-events:none}.route-glow{fill:none;stroke:#fff;stroke-width:20;stroke-linejoin:round;stroke-linecap:round;opacity:.9}.route-line{fill:none;stroke:#e65b46;stroke-width:9;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 3px 2px #57352b42)}
 .route-options button.active{background:#1f4082;border-color:#1f4082}.route-glow{stroke-width:18;opacity:.96}.route-line{stroke:#1f4082;stroke-width:7;filter:drop-shadow(0 2px 2px #14306340)}.route-endpoint{fill:#1f4082;stroke:#fff;stroke-width:4;filter:drop-shadow(0 2px 2px #14306355)}
+/* Raised warehouse slab, thicker partition walls and low oblique floor perspective. */
+.floor-viewport{perspective:1800px;perspective-origin:50% 38%;background:linear-gradient(155deg,#f8faf6,#eaf1e9)}
+.floor-viewport svg{background:transparent;transform:perspective(1800px) rotateX(16deg) rotateZ(-.6deg);transform-origin:50% 48%;filter:drop-shadow(0 18px 10px #29483a35)}
+.plan-slab-side{fill:#b8c9bc;stroke:#526f63;stroke-width:3;filter:drop-shadow(0 12px 7px #1b3e3230)}
+.plan-slab{filter:drop-shadow(0 2px 0 #fff)}
+.plan-wall-side{fill:none;stroke:#526f63;stroke-width:12;stroke-linecap:square;stroke-linejoin:round;opacity:.92}
+.plan-wall{stroke-width:8;filter:drop-shadow(0 5px 0 #526f63) drop-shadow(0 10px 3px #24453833)}
+.redrawn-plan .floor-zone rect{filter:drop-shadow(2px 4px 0 #6e8c7c55) drop-shadow(0 6px 4px #1d403222)}
+.redrawn-plan .floor-zone.cold rect{filter:drop-shadow(2px 4px 0 #5876a455) drop-shadow(0 6px 4px #1d315222)}
+.redrawn-plan .floor-dock rect{filter:drop-shadow(0 4px 0 #10453e65) drop-shadow(0 6px 3px #1d403230)}
+/* Direct orbit, zoom, and pan controls for the interactive warehouse model. */
+.floor-viewport{touch-action:none;cursor:grab}
+.floor-viewport.is-dragging{cursor:grabbing;user-select:none}
+.floor-viewport svg{transform:translate(var(--floor-pan-x,0px),var(--floor-pan-y,0px)) perspective(1800px) rotateX(var(--floor-pitch,16deg)) rotateZ(var(--floor-yaw,-.6deg))}
+.floor-view-toggle{display:flex;align-items:center;gap:2px;padding:2px;border:1px solid #d8e5dc;border-radius:6px;background:#f3f7f2}
+.floor-view-toggle button{border:0;background:transparent;color:#71827a;border-radius:4px;padding:6px 8px;font-size:11px}
+.floor-view-toggle button.active{background:#18605a;color:#fff}
+.floor-zoom button[aria-label="旋转45度"]{font-size:18px;color:#18605a}
+@media(max-width:650px){.floor-board-toolbar{height:auto;min-height:62px;flex-wrap:wrap;padding:9px 10px}.floor-board-toolbar>div:first-child{flex:1 0 100%}.floor-board-toolbar small{font-size:9px}.floor-zoom{width:100%;justify-content:flex-end;flex-wrap:wrap;gap:3px}.floor-zoom button{padding:5px 7px;font-size:11px}.floor-view-toggle button{padding:5px 7px}}
+
