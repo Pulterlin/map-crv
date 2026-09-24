@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#18605A"><meta name="description" content="深圳生鲜配送中心立体导览，查找建筑、30个卸货码头及现场照片。">
   <title>深圳生鲜配送中心·立体导览</title>
-  <link rel="stylesheet" href="styles.css?v=docks-87">
+  <link rel="stylesheet" href="styles.css?v=floor-90">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/"}}</script>
 </head>
 <body>
@@ -29,12 +29,12 @@
       <div class="map-note">布局示意·建筑高度与码头间距非实测</div>
       <div id="loading" class="loading"><span class="loader"></span><strong>正在准备园区地图</strong><span>让每一个目的地清晰可见</span></div>
       <div id="map-error" class="map-error" hidden><strong>立体地图暂时无法显示</strong><p>仍可使用地点列表查找码头和查看照片。</p><button id="retry">重新加载地图</button><a href="主地图.jpg" target="_blank" rel="noopener">查看原始参考图↗</a></div>
-      <article id="detail" class="detail" hidden aria-label="地点详情"><button id="detail-close" class="close" aria-label="关闭地点详情">×</button><span id="detail-kind" class="eyebrow"></span><h2 id="detail-title"></h2><p id="detail-description"></p><div id="detail-tags" class="detail-tags"></div><div id="dock-picker"></div><button id="photo-button" class="photo-button" hidden><span>查看现场照片</span><span>↗</span></button><p id="photo-note" class="photo-note"></p></article>
+      <article id="detail" class="detail" hidden aria-label="地点详情"><button id="detail-close" class="close" aria-label="关闭地点详情">×</button><span id="detail-kind" class="eyebrow"></span><h2 id="detail-title"></h2><p id="detail-description"></p><div id="detail-tags" class="detail-tags"></div><div id="dock-picker"></div><figure id="detail-media" class="detail-media" hidden><img id="detail-photo" alt="" loading="lazy"><figcaption id="photo-note"></figcaption></figure></article>
     </section>
   </main>
-  <dialog id="photo-dialog" class="photo-dialog"><div class="dialog-heading"><h2 id="photo-title">现场照片</h2><button id="photo-close" class="close" aria-label="关闭照片">×</button></div><div class="photo-stage"><p id="photo-status" role="status">正在加载照片…</p><img id="photo" alt="" hidden></div><p class="photo-caption">现场参考照片·以实际现场为准</p></dialog>
   <dialog id="contact-dialog" class="contact-dialog"><div class="dialog-heading"><h2>联系万家</h2><button id="contact-close" class="close" aria-label="关闭联系方式">×</button></div><p class="address">深圳市龙华区龙华街道清湖社区<br>清祥路23号·清湖冷链</p><div id="contacts"></div><p class="photo-caption">联系方式沿用原园区页面</p></dialog>
   <div id="announcement" class="sr-only" aria-live="polite"></div>
-  <script type="module" src="app.js?v=docks-87"></script>
+  <script type="module" src="app.js?v=floor-90"></script>
 </body>
 </html>
+

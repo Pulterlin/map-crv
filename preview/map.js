@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {buildings,places,docks,allPlaces,COLORS} from './data.js?v=docks-87';
+import {buildings,places,docks,allPlaces,COLORS} from './data.js?v=floor-90';
 
 export function createMap(container,labelLayer,onSelect){
  const scene=new THREE.Scene();scene.background=new THREE.Color('#eaf0e9');
@@ -38,7 +38,7 @@ export function createMap(container,labelLayer,onSelect){
  for(const [x,z,w,d] of [[-197,-66,57,72],[-196,74,64,72],[-198,192,63,74],[-201,307,54,52],[177,-62,54,70],[177,73,56,67],[178,195,55,70],[173,309,60,52],[-66,306,65,45],[33,307,73,43]]){
   box(w,.16,d,x,-.16,z,districtMat);box(w*.78,.2,d*.68,x,-.02,z,districtRoof);
  }
- road(-59,40,30,236,'road1');road(-57,-19,27,84,'road2');road(0,82,139,26,'road3');road(48,139,20,136,'road4');road(48,-10,24,136,'rear');road(0,195,231,14);road(-90,103,115,20);
+ road(-59,40,30,236,'road1');road(-57,-19,27,84,'road2');road(-39,82,218,26,'road3');road(48,139,20,136,'road4');road(48,-10,24,136,'rear');road(0,195,231,14);
  // Short neutral centre marks on perimeter roads; no unconfirmed direction arrows.
  const lineMat=mat(0xf3f2d9);for(const x of [-246,-148,132,218])for(let z=-165;z<365;z+=21)box(.6,.05,7,x,.69,z,lineMat);for(const z of [-151,260,348])for(let x=-254;x<232;x+=21)box(7,.05,.6,x,.69,z,lineMat);
  // Street names are printed on the asphalt, with transparent backgrounds and no DOM label boxes.
@@ -51,16 +51,16 @@ export function createMap(container,labelLayer,onSelect){
   // Roof seams give the warehouses a tangible, restrained architectural finish.
   const seamMat=mat(new THREE.Color(b.color).lerp(new THREE.Color(0xffffff),.17));
   for(let x=b.x-b.w/2+3;x<b.x+b.w/2;x+=4)box(.25,.2,b.d-3,x,b.h+1.7,b.z,seamMat);
-  if(['a','b','office'].includes(b.id)){
+  if(b.floors>1&&['a','b','office'].includes(b.id)){
    for(let floor=3;floor<b.h;floor+=4){for(let z=b.z-b.d/2+5;z<b.z+b.d/2-3;z+=9){box(.15,1.45,4,b.x+b.w/2+.1,floor,z,glassMat);box(.15,1.45,4,b.x-b.w/2-.1,floor,z,glassMat);}box(.22,.12,b.d-2,b.x+b.w/2+.12,floor+1.7,b.z,curbMat);box(.22,.12,b.d-2,b.x-b.w/2-.12,floor+1.7,b.z,curbMat);}
    if(b.id==='a'||b.id==='office')for(let k=0;k<3;k++)box(6,1.6,4,b.x+b.w*.18,b.h+2.4,b.z-b.d*.26+k*11,mat(0xd2d8cc));
   }
   roof.userData.baseColor=roof.material.color.clone();
  }
  // Front canopy and the two distinct rear loading groups.
- const canopy=mat(0xdbe2d6);box(3,.7,112,-33,5.1,0,canopy,'front');box(3,.7,72,33,5.1,-18,canopy,'rear');box(3,.7,30,69,5.1,41,canopy,'rear');
+ const canopy=mat(0xdbe2d6);box(3,.7,112,-33,5.1,0,canopy,'front');box(3,.7,51,63,5.1,-30,canopy,'rear');box(3,.7,25,33,5.1,40,canopy,'rear');
  const dockMat=mat(COLORS.green);const dockStripe=mat(0xf8f4dc);
- for(const dock of docks){const mesh=box(dock.depth,.6,dock.width,dock.x,.92,dock.z,dockMat.clone(),dock.id);mesh.userData.baseColor=mesh.material.color.clone();for(const edge of [-1,1])box(dock.depth,.09,.18,dock.x,1.28,dock.z+edge*dock.width/2,dockStripe);box(.4,.09,dock.width,dock.x+(dock.group==='front'?-1:1)*dock.depth/2,1.28,dock.z,dockStripe);}
+ for(const dock of docks){const end=dock.orientation==='end';const mesh=box(end?dock.width:dock.depth,.6,end?dock.depth:dock.width,dock.x,.92,dock.z,dockMat.clone(),dock.id);mesh.userData.baseColor=mesh.material.color.clone();for(const edge of [-1,1]){if(end)box(.18,.09,dock.depth,dock.x+edge*dock.width/2,1.28,dock.z,dockStripe);else box(dock.depth,.09,.18,dock.x,1.28,dock.z+edge*dock.width/2,dockStripe);}if(end)box(dock.width,.09,.4,dock.x,1.28,dock.z-dock.depth/2,dockStripe);else box(.4,.09,dock.width,dock.x+(dock.group==='front'?-1:1)*dock.depth/2,1.28,dock.z,dockStripe);}
  // The document room is a marked zone on A, not a detached building.
  const documentZone=box(15,.35,17,-18,24.85,-43,mat(0xe8c887),'documents');
  box(42,.4,17,20,.85,-76,mat(0xb7cec0),'wash');for(let k=0;k<4;k++)box(3,1.4,3,9+k*6,1.75,-76,mat(0x729a8a));
@@ -70,8 +70,11 @@ export function createMap(container,labelLayer,onSelect){
  function tree(x,z){box(1,4,1,x,2,z,trunkMat);const crown=new THREE.Mesh(new THREE.IcosahedronGeometry(4.2,1),leafMat);crown.position.set(x,6,z);crown.scale.y=1.25;crown.castShadow=true;scene.add(crown);}
  // Charging bays near the front corridor entrance.
  for(let i=0;i<3;i++){box(8,.1,5,-88,.85,64+i*7,mat(0xa2c3ad));box(1.7,3.1,1.2,-94,2.2,64+i*7,mat(COLORS.green));}
- box(22,1,3,-133,8,24,mat(COLORS.green));box(1,8,1,-143,4,24,wallMat);box(1,8,1,-123,4,24,wallMat);
- const gateMarker=document.createElement('button');gateMarker.className='gate-marker';gateMarker.type='button';gateMarker.setAttribute('aria-label','西北门，点击定位到园区大门');gateMarker.innerHTML='<span aria-hidden="true">↖</span><span>西北门</span><small>园区入口·点击定位</small>';gateMarker.addEventListener('click',()=>onSelect('gate'));labelLayer.append(gateMarker);
+ // The entrance road is one straight segment. A portal straddles it at the northwest end.
+ const gateGreen=mat(COLORS.green),gateGold=mat(0xd6a446);
+ box(2,11,2,-139,5.5,68,gateGreen,'gate');box(2,11,2,-139,5.5,96,gateGreen,'gate');
+ box(2,2,30,-139,11,82,gateGreen,'gate');box(3,.65,25,-139,12.35,82,gateGold);
+ box(7,.08,22,-139,.76,82,gateGold);
  labelLayer.removeAttribute('aria-hidden');
  function addLabel(p,text,kind=''){const interactive=allPlaces.some(place=>place.id===p.id);const node=document.createElement(interactive?'button':'span');node.className='map-label '+kind;node.textContent=text;if(interactive){node.tabIndex=-1;node.setAttribute('aria-label',p.name||text);node.onclick=()=>onSelect(p.id);}labelLayer.append(node);labels.push({p,node,point:new THREE.Vector3(p.x,p.y||3,p.z),kind});}
  for(const id of ['a','b','d','office','c8','documents','wash','front','rear']){const p=places.find(p=>p.id===id);addLabel(p,p.name,p.kind==='cold'?'cold':'');}
@@ -110,3 +113,4 @@ export function createMap(container,labelLayer,onSelect){
  frame=requestAnimationFrame(animate);
  return {select,clear,reset,zoom(factor){transition=null;const offset=camera.position.clone().sub(controls.target);offset.setLength(THREE.MathUtils.clamp(offset.length()/factor,70,900));camera.position.copy(controls.target).add(offset);controls.update();dirty=true;},view(value){top=value;const distance=camera.position.distanceTo(controls.target);const dir=top?new THREE.Vector3(0,1,.015).normalize():homeDirection;move(controls.target,controls.target.clone().addScaledVector(dir,distance));},rotate(){transition=null;const offset=camera.position.clone().sub(controls.target).applyAxisAngle(new THREE.Vector3(0,1,0),Math.PI/6);camera.position.copy(controls.target).add(offset);controls.update();dirty=true;},dispose(){cancelAnimationFrame(frame);observer.disconnect();controls.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});for(const item of disposables)item.dispose();renderer.dispose();}};
 }
+
