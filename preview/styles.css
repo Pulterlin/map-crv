@@ -15,6 +15,12 @@
 .map-label.dock{font-size:9px;padding:2px;min-width:16px;text-align:center;z-index:3}
 .detail-media{margin:15px 0 0}.detail-media img{display:block;width:100%;height:170px;object-fit:cover;border-radius:8px;background:#edf2ec}.detail-media figcaption{margin-top:7px;color:#829087;font-size:10px;line-height:1.5}
 .map-label.gate-label{z-index:8!important;display:flex;align-items:center;gap:7px;padding:7px 11px 7px 7px;background:#18605a;color:#fff;border:2px solid #e2b553;border-radius:8px;box-shadow:0 4px 14px #113c35a0;font-size:12px;font-weight:800}.map-label.gate-label::before{content:'门';display:grid;place-items:center;width:24px;height:24px;border-radius:4px;background:#e2b553;color:#21483c;font-size:13px}
+.legend .ambient{background:#65db7c}.legend .chilled{background:#00a82a}.legend .frozen{background:#18605a}
+.place[data-temperature=ambient]{--place-accent:#65db7c;--place-icon-text:#16432b}
+.place[data-temperature=chilled]{--place-accent:#00a82a;--place-icon-text:#fff}
+.place[data-temperature=frozen]{--place-accent:#18605a;--place-icon-text:#fff}
+.place[data-temperature] .place-icon{background:var(--place-accent);color:var(--place-icon-text)}
+.place[data-temperature] .place-arrow{color:var(--place-accent)}
 /* Three-dimensional interior floor model and focused arrival dive. */
 .floor-arrival .floor-intro{animation:floor-title-arrive .4s .08s ease-out both}
 .floor-arrival .floor-panel{animation:floor-panel-arrive .64s .22s cubic-bezier(.2,.75,.2,1) both}
@@ -23,4 +29,3 @@
 @keyframes floor-panel-arrive{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
 @keyframes floor-dive-in{0%{opacity:0;filter:blur(9px);transform:perspective(1400px) translateY(58px) scale(.58) rotateX(24deg)}58%{opacity:1;filter:blur(0);transform:perspective(1400px) translateY(-5px) scale(1.015) rotateX(-1deg)}100%{opacity:1;filter:blur(0);transform:perspective(1400px) translateY(0) scale(1) rotateX(0)}}
 @media(prefers-reduced-motion:reduce){.floor-arrival .floor-intro,.floor-arrival .floor-panel,.floor-arrival .floor-board{animation:none!important}}
-

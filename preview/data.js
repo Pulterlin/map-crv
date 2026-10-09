@@ -2,12 +2,13 @@
 // not surveyed metres. x: toward the rear corridor; z: toward B/C buildings.
 export const COLORS = {green:0x18605a, blue:0x1f4082, sand:0xb6b19e};
 export const buildings = [
-  {id:'a',name:'A栋·恒温/冷藏',floors:6,x:0,z:0,w:64,d:112,h:24,color:0x18605a},
-  {id:'a',name:'A栋1楼后穿堂外扩',floors:1,part:'ground-floor-extension',x:42,z:-30,w:20,d:52,h:4,color:0x2f7b70},
+  {id:'a',name:'A栋·恒温/冷藏',floors:6,x:0,z:0,w:64,d:112,h:24,color:0x65db7c},
+  {id:'a',name:'A栋1楼后穿堂外扩',floors:1,part:'ground-floor-extension',x:42,z:-30,w:20,d:52,h:4,color:0x65db7c},
+  {id:null,name:'',floors:6,x:95,z:10,w:30,d:92,h:24,color:0xb6b19e},
   {id:'b',name:'B栋',floors:6,x:-4,z:146,w:65,d:88,h:24,color:0xb6b19e},
-  {id:'d',name:'D栋·冷藏',floors:1,x:-100,z:-41,w:56,d:63,h:6,color:0x1f4082},
+  {id:'d',name:'D栋·冷藏',floors:1,x:-100,z:-41,w:56,d:63,h:6,color:0x00a82a},
   {id:'office',name:'办公楼',floors:6,x:80,z:137,w:30,d:60,h:24,color:0xb6b19e},
-  ...[8,7,6,5].map((n,i)=>({id:'c'+n,name:n+'号库',floors:1,heightLabel:'約10米',x:-50+i*40,z:220,w:39.5,d:35,h:24,color:n===8?0x1f4082:0x8294b1}))
+  ...[8,7,6,5].map((n,i)=>({id:'c'+n,name:n+'号库',floors:1,heightLabel:'約10米',x:-50+i*40,z:220,w:39.5,d:35,h:24,color:0x18605a}))
 ];
 export const places = [
   {id:'a',name:'A栋·恒温/冷藏',short:'A',kind:'building',subtitle:'6层·恒温与冷藏区域',x:0,z:0,y:27,description:'6层建筑，设有恒温与冷藏区域。前穿堂设1–16号码头，后穿堂设17–30号码头。',tags:['6层','恒温/冷藏','前穿堂16个码头','后穿堂14个码头'],groups:['front','rear']},

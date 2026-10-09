@@ -1,4 +1,4 @@
-import {places,docks,allPlaces,contacts,searchPlaces} from './data.js?v=floor-90';
+import {places,docks,allPlaces,contacts,searchPlaces} from './data.js?v=palette-top-4';
 import {floorPlans} from './floor-data.js?v=floor-90';
 const $=id=>document.getElementById(id);
 let map=null,selected=null,filter='all',lastTrigger=null;
@@ -8,15 +8,19 @@ function enterBuilding(url,buildingKey){
   if(enteringBuilding)return;
   enteringBuilding=true;
   try{sessionStorage.setItem('mapcrv:floor-entry',JSON.stringify({building:buildingKey,at:Date.now()}));}catch{}
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){location.href=url;return;}
-  map?.enter(buildingKey);
-  setTimeout(()=>{location.href=url;},1050);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){location.assign(url);return;}
+  setTimeout(()=>location.assign(url),1050);
+  try{map?.enter(buildingKey);}catch(error){console.error('Entrance animation failed',error);location.assign(url);}
 }
 function list(){
   const results=searchPlaces($('search').value,filter);$('result-count').textContent=results.length+'个';
   $('place-list').replaceChildren();
   if(!results.length){const p=document.createElement('p');p.className='empty';p.textContent='没有找到该地点，试试“A17”或“8号库”。';$('place-list').append(p);return;}
-  for(const place of results){const button=document.createElement('button');button.className='place'+(selected?.id===place.id?' selected':'');button.dataset.id=place.id;button.dataset.kind=place.kind;button.setAttribute('aria-pressed',String(selected?.id===place.id));
+  for(const place of results){const button=document.createElement('button');button.className='place'+(selected?.id===place.id?' selected':'');button.dataset.id=place.id;button.dataset.kind=place.kind;
+    if(place.id==='d')button.dataset.temperature='chilled';
+    else if(/^c[5-8]$/.test(place.id))button.dataset.temperature='frozen';
+    else if(['a','front','rear','documents','wash'].includes(place.id)||place.id.startsWith('dock'))button.dataset.temperature='ambient';
+    button.setAttribute('aria-pressed',String(selected?.id===place.id));
     const icon=document.createElement('span');icon.className='place-icon';icon.textContent=place.short;
     const copy=document.createElement('span');copy.className='place-copy';const title=document.createElement('strong');title.textContent=place.name;const sub=document.createElement('small');sub.textContent=place.subtitle;copy.append(title,sub);
     const arrow=document.createElement('span');arrow.className='place-arrow';arrow.textContent='↗';button.append(icon,copy,arrow);button.onclick=()=>select(place.id,button);$('place-list').append(button);}
@@ -43,7 +47,6 @@ for(const dialog of document.querySelectorAll('dialog'))dialog.addEventListener(
 for(const [name,tel]of contacts){const row=document.createElement('div');row.className='contact-row';const label=document.createElement('span');label.textContent=name;const link=document.createElement('a');link.textContent=tel;link.href='tel:'+tel;row.append(label,link);$('contacts').append(row);}
 document.addEventListener('keydown',e=>{if(e.key==='/'&&!/input|textarea/i.test(e.target.tagName)&&!document.querySelector('dialog[open]')){e.preventDefault();$('search').focus();}if(e.key==='Escape'&&!document.querySelector('dialog[open]'))closeDetail();});
 list();
-try{const {createMap}=await import('./map.js?v=building-dive-2');map=createMap($('scene'),$('labels'),id=>select(id));$('loading').hidden=true;const initial=new URLSearchParams(location.search).get('place');if(initial)select(initial);}
+try{const {createMap}=await import('./map.js?v=palette-top-7');map=createMap($('scene'),$('labels'),id=>select(id));$('loading').hidden=true;const initial=new URLSearchParams(location.search).get('place');if(initial)select(initial);}
 catch(error){console.error('Map initialization failed',error);$('loading').hidden=true;$('map-error').hidden=false;for(const id of ['zoom-in','zoom-out','rotate','reset','view-top','view-3d'])$(id).disabled=true;}
-
 
