@@ -19,7 +19,7 @@ else{
  diagram.append(svg('path',{d:'M370 246H1543V1178H1005V1058H370Z',transform:'translate(0 20)',class:'plan-slab-side'}));
  diagram.append(svg('path',{d:'M370 246H1543V1178H1005V1058H370Z',class:'plan-slab'}));
  const annotation=(x,y,text,cls='plan-caption')=>{const node=svg('text',{x,y,class:cls});node.textContent=text;diagram.append(node);};
- annotation(390,200,'前穿堂 · 1–16号码头');annotation(390,1130,'后穿堂 · 27–30号码头');
+ annotation(390,200,'前穿堂 · 1–16号码头');annotation(390,1165,'后穿堂 · 27–30号码头');
  annotation(1030,1250,'一楼外扩 · 后穿堂');
  for(const [x,y,w,h,label] of [[374,375,62,112,'楼梯'],[1426,369,112,114,'单据室'],[374,505,62,190,'楼梯'],[1484,503,55,137,'楼梯'],[965,991,136,65,'楼梯']]){
   diagram.append(svg('rect',{x,y,width:w,height:h,rx:3,class:'plan-support'}));annotation(x+w/2,y+h/2,label,'plan-room-label');
@@ -64,7 +64,6 @@ else{
   {x:1543,y:430,width:48,vertical:true,sliding:true,name:'东侧平移门'},
   {x:440,y:635,width:62,vertical:true,sliding:true,name:'西侧平移门'},
   {x:1543,y:635,width:62,vertical:true,sliding:true,name:'东侧平移门'},
-  {x:1050,y:1178,width:58,sliding:true,name:'后穿堂平移门'},
   {x:1543,y:1118,width:52,vertical:true,sliding:true,name:'后穿堂东侧平移门'}
  ];
  for(const door of doors){
