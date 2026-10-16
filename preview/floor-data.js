@@ -3,8 +3,8 @@ const zone=(id,name,temp,x,y,w,h,note='')=>({id,name,temp,x,y,w,h,note,type:'zon
 const aZones=[
  zone('social-label-side','社超电子标签分播区（侧区）','ambient',383,701,55,230),
  zone('buffer-rear-right','收发暂存区（后穿堂右侧）','ambient',1245,988,84,55),
- zone('returns','退货暂存区','ambient',657,249,99,40),
- zone('packing','仓调暂存区','ambient',520,290,235,40),
+ zone('returns','退货暂存区','ambient',657,270,99,34),
+ zone('packing','仓调暂存区','ambient',520,314,235,34),
  zone('receiving-front','收货区（仓调、面包、鸡蛋）','ambient',765,265,380,85),
  zone('forklift','叉车存放区','support',1150,249,105,82),
  zone('buffer-front-left','收发暂存区（前穿堂西侧）','ambient',491,392,361,64),
