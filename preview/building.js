@@ -56,20 +56,16 @@ else{
   diagram.append(svg('path',{d,transform:'translate(0 12)',class:'plan-wall-side'}));
   diagram.append(svg('path',{d,class:'plan-wall'}));
  }
- // Sliding-door positions follow the yellow door marks on the 0924 CAD plan.
- // Centers are aligned to equivalent wall runs in this clean redraw.
+ // Door centers are aligned to the corrected wall openings in this redraw.
  const doors=[
-  {x:550,y:250,width:46,sliding:true,name:'前穿堂平移门'},
-  {x:625,y:250,width:46,sliding:true,name:'前穿堂平移门'},
-  {x:1271,y:250,width:46,sliding:true,name:'前穿堂平移门'},
-  {x:1345,y:250,width:46,sliding:true,name:'前穿堂平移门'},
   {x:370,y:430,width:48,vertical:true,sliding:true,name:'西侧平移门'},
   {x:486,y:430,width:48,vertical:true,sliding:true,name:'西侧平移门'},
   {x:1426,y:430,width:48,vertical:true,sliding:true,name:'东侧平移门'},
   {x:1543,y:430,width:48,vertical:true,sliding:true,name:'东侧平移门'},
   {x:440,y:635,width:62,vertical:true,sliding:true,name:'西侧平移门'},
   {x:1543,y:635,width:62,vertical:true,sliding:true,name:'东侧平移门'},
-  {x:1050,y:1178,width:58,sliding:true,name:'后穿堂平移门'}
+  {x:1050,y:1178,width:58,sliding:true,name:'后穿堂平移门'},
+  {x:1543,y:1118,width:52,vertical:true,sliding:true,name:'后穿堂东侧平移门'}
  ];
  for(const door of doors){
   const g=svg('g',{class:'plan-door',transform:'translate('+door.x+' '+door.y+')'+(door.vertical?' rotate(90)':''),role:'img','aria-label':door.name});
