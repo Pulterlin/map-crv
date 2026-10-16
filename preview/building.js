@@ -1,4 +1,4 @@
-import {floorPlans} from './floor-data.js?v=floor-100';
+import {floorPlans} from './floor-data.js?v=20261016-1';
 
 const $=id=>document.getElementById(id);
 const building=new URLSearchParams(location.search).get('building')||'a';

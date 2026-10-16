@@ -1,5 +1,5 @@
-import {places,docks,allPlaces,contacts,searchPlaces} from './data.js?v=palette-top-4';
-import {floorPlans} from './floor-data.js?v=floor-90';
+import {places,docks,allPlaces,contacts,searchPlaces} from './data.js?v=20261016-1';
+import {floorPlans} from './floor-data.js?v=20261016-1';
 const $=id=>document.getElementById(id);
 let map=null,selected=null,filter='all',lastTrigger=null;
 let enteringBuilding=false;
@@ -47,6 +47,6 @@ for(const dialog of document.querySelectorAll('dialog'))dialog.addEventListener(
 for(const [name,tel]of contacts){const row=document.createElement('div');row.className='contact-row';const label=document.createElement('span');label.textContent=name;const link=document.createElement('a');link.textContent=tel;link.href='tel:'+tel;row.append(label,link);$('contacts').append(row);}
 document.addEventListener('keydown',e=>{if(e.key==='/'&&!/input|textarea/i.test(e.target.tagName)&&!document.querySelector('dialog[open]')){e.preventDefault();$('search').focus();}if(e.key==='Escape'&&!document.querySelector('dialog[open]'))closeDetail();});
 list();
-try{const {createMap}=await import('./map.js?v=palette-top-7');map=createMap($('scene'),$('labels'),id=>select(id));$('loading').hidden=true;const initial=new URLSearchParams(location.search).get('place');if(initial)select(initial);}
+try{const {createMap}=await import('./map.js?v=20261016-1');map=createMap($('scene'),$('labels'),id=>select(id));$('loading').hidden=true;const initial=new URLSearchParams(location.search).get('place');if(initial)select(initial);}
 catch(error){console.error('Map initialization failed',error);$('loading').hidden=true;$('map-error').hidden=false;for(const id of ['zoom-in','zoom-out','rotate','reset','view-top','view-3d'])$(id).disabled=true;}
 
