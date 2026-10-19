@@ -1,4 +1,4 @@
-import {floorPlans} from './floor-data.js?v=20261019-3';
+import {floorPlans} from './floor-data.js?v=20261019-4';
 
 const $=id=>document.getElementById(id);
 const building=new URLSearchParams(location.search).get('building')||'a';
@@ -19,8 +19,10 @@ else{
  diagram.append(svg('path',{d:'M370 246H1543V1178H1005V1058H370Z',transform:'translate(0 20)',class:'plan-slab-side'}));
  diagram.append(svg('path',{d:'M370 246H1543V1178H1005V1058H370Z',class:'plan-slab'}));
  const annotation=(x,y,text,cls='plan-caption')=>{const node=svg('text',{x,y,class:cls});node.textContent=text;diagram.append(node);};
- annotation(390,200,'前穿堂 · 1–16号码头');annotation(390,1165,'后穿堂 · 27–30号码头');
- annotation(1030,1250,'一楼外扩 · 后穿堂');
+ annotation(390,200,'前穿堂 · 1–16号码头');
+ const dockCaption=(numbers,label)=>{const group=plan.docks.filter(d=>numbers.includes(d.number));annotation(Math.min(...group.map(d=>d.x)),Math.max(...group.map(d=>d.y+d.h))+46,label);};
+ dockCaption([27,28,29,30],'后穿堂 · 27–30号码头');
+ dockCaption([18,19,20,21,22,23,24,25,26],'一楼外扩 · 后穿堂');
  for(const [x,y,w,h,label] of [[374,375,62,112,'楼梯'],[1426,369,112,114,'单据室'],[374,505,62,190,'楼梯'],[1484,503,55,137,'楼梯'],[965,991,136,65,'楼梯']]){
   diagram.append(svg('rect',{x,y,width:w,height:h,rx:3,class:'plan-support'}));annotation(x+w/2,y+h/2,label,'plan-room-label');
  }

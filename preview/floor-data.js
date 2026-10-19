@@ -33,7 +33,7 @@ const rearMain=[30,29,28,27].map((number,i)=>({id:'dock'+number,number,type:'doc
 const rearExtension=Array.from({length:9},(_,i)=>({id:'dock'+(26-i),number:26-i,type:'dock',name:'A'+(26-i)+'号码头',group:'后穿堂·一楼外扩侧',photo:'A栋1楼后穿堂.jpg',x:1018+i*61,y:1201,w:52,h:43}));
 const endDock={id:'dock17',number:17,type:'dock',name:'A17号码头',group:'后穿堂·一楼外扩端面',photo:'A栋1楼后穿堂.jpg',x:1545,y:1151,w:49,h:29};
 export const floorPlans={
- a:{building:'a',buildingName:'A栋',title:'A栋·一楼功能区',floor:'1F',subtitle:'恒温与冷藏分区 · 30个卸货码头',viewBox:[325,165,1280,1110],zones:aZones,docks:[...frontDocks,...rearMain,...rearExtension,endDock],routes:{visitor:{name:'参观路线',path:'M1582 464 H980 V350 H731 V465 H765 V495 H530 V900 H1183 V965 H1228 V1120 H1582',start:[1582,464],end:[1582,1120]}},note:'依据一楼平面图绘制，保留库板分隔与通道；尺寸为导览示意。'}
+ a:{building:'a',buildingName:'A栋',title:'A栋·一楼功能区',floor:'1F',subtitle:'恒温与冷藏分区 · 30个卸货码头',viewBox:[325,165,1280,1160],zones:aZones,docks:[...frontDocks,...rearMain,...rearExtension,endDock],routes:{visitor:{name:'参观路线',path:'M1582 464 H980 V350 H731 V465 H765 V495 H530 V900 H1183 V965 H1228 V1120 H1582',start:[1582,464],end:[1582,1120]}},note:'依据一楼平面图绘制，保留库板分隔与通道；尺寸为导览示意。'}
 };
 
 
