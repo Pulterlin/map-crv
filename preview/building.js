@@ -1,4 +1,4 @@
-import {floorPlans} from './floor-data.js?v=20261019-2';
+import {floorPlans} from './floor-data.js?v=20261019-3';
 
 const $=id=>document.getElementById(id);
 const building=new URLSearchParams(location.search).get('building')||'a';
@@ -34,7 +34,6 @@ else{
    'social-label-ambient':['社超','电子标签'],
    'social-produce':['社超蔬菜水果','分播区'],
    'general-bread':['综超','面包','分播区'],
-   'general-fruit-west':['综超','水果','分播区'],
    'general-vegetable':['综超','蔬菜','分播区'],
    'general-fruit-east':['综超水果','分播区'],
    'social-label-cold':['社超电子','标签分播'],
