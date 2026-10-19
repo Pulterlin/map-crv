@@ -8,7 +8,7 @@ const aZones=[
  zone('receiving-front','收货区（仓调、面包、鸡蛋）','ambient',765,265,380,85),
  zone('forklift','叉车存放区','support',1150,249,105,82),
  zone('buffer-front-left','收发暂存区（前穿堂西侧）','ambient',491,392,361,64),
- zone('buffer-front-right','收发暂存区（前穿堂东侧）','ambient',965,392,425,64),
+ zone('buffer-front-right','收发暂存区（前穿堂东侧）','ambient',1016,392,374,64),
  zone('social-label-ambient','社超电子标签分播区（恒温）','ambient',443,486,83,392),
  zone('social-produce','社超蔬菜水果分播区','ambient',540,486,211,390),
  zone('general-bread','综超面包分播区','ambient',769,486,58,390),

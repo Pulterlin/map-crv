@@ -1,4 +1,4 @@
-import {floorPlans} from './floor-data.js?v=20261019-1';
+import {floorPlans} from './floor-data.js?v=20261019-2';
 
 const $=id=>document.getElementById(id);
 const building=new URLSearchParams(location.search).get('building')||'a';
@@ -52,12 +52,13 @@ else{
   const g=svg('g',{class:'floor-dock','data-id':d.id,role:'button',tabindex:'0','aria-label':d.name});g.append(svg('rect',{x:d.x,y:d.y,width:d.w,height:d.h,rx:4}));const t=svg('text',{x:d.x+d.w/2,y:d.y+d.h/2});t.textContent=d.number;g.append(t);g.addEventListener('click',()=>choose(d));g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(d);}});diagram.append(g);nodes.set(d.id,g);
  }
  // Structural partitions stay separate from functional zones; gaps represent openings.
- for(const d of ['M370 250V368H486V490H440V696H370V1058H765 M955 1058H1005V1178H1543V250','M370 250H1543','M486 375H505 M545 375H704 M758 375H960 M1000 375H1156 M1210 375H1390','M1100 494H1418 M1100 494V890 M1100 920V940','M1378 660V895 M1378 925V1058','M1390 645H1543','M370 938H505 M545 938H704 M758 938H960 M1000 938H1156 M1210 938H1418 M1468 938H1543','M1426 369H1543 M1426 369V436 M1426 468V493H1543','M765 1058V995H950V1058','M1005 1058H1193 M1253 1058H1332 M1455 1058H1543']){
+ for(const d of ['M370 250V368H486V490H440V696H370V1058H765 M955 1058H1005V1178H1543V250','M370 250H1543','M486 375H704 M758 375H844 M872 375H960 M1000 375H1390','M1100 494H1418 M1100 494V890 M1100 920V940','M1378 660V895 M1378 925V1058','M1390 645H1543','M370 938H505 M545 938H704 M758 938H960 M1000 938H1156 M1210 938H1418 M1468 938H1543','M1426 369H1543 M1426 369V436 M1426 468V493H1543','M765 1058V995H950V1058','M1005 1058H1193 M1253 1058H1332 M1455 1058H1543']){
   diagram.append(svg('path',{d,transform:'translate(0 12)',class:'plan-wall-side'}));
   diagram.append(svg('path',{d,class:'plan-wall'}));
  }
  // Door centers are aligned to the corrected wall openings in this redraw.
  const doors=[
+  {x:858,y:375,width:28,sliding:true,name:'前穿堂进库小门'},
   {x:370,y:430,width:48,vertical:true,sliding:true,name:'西侧平移门'},
   {x:486,y:430,width:48,vertical:true,sliding:true,name:'西侧平移门'},
   {x:1426,y:430,width:48,vertical:true,sliding:true,name:'东侧平移门'},
