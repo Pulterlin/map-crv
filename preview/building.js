@@ -22,7 +22,7 @@ else{
  const dockCaption=(numbers,label)=>{const group=plan.docks.filter(d=>numbers.includes(d.number));annotation(Math.min(...group.map(d=>d.x)),Math.max(...group.map(d=>d.y+d.h))+46,label);};
  dockCaption([27,28,29,30],'后穿堂 · 27–30号码头');
  dockCaption([18,19,20,21,22,23,24,25,26],'一楼外扩 · 后穿堂');
- for(const [x,y,w,h,label] of [[374,375,50,78,'货梯'],[432,375,50,78,'货梯'],[1426,369,112,114,'单据室'],[374,495,62,140,''],[374,645,38,47,'电梯'],[1484,503,55,137,'楼梯'],[965,991,136,65,'楼梯']]){
+ for(const [x,y,w,h,label] of [[374,375,38,78,''],[420,375,38,78,''],[1426,369,112,114,'单据室'],[374,495,62,140,''],[374,645,38,47,''],[1484,503,55,137,'楼梯'],[965,991,136,65,'楼梯']]){
   diagram.append(svg('rect',{x,y,width:w,height:h,rx:3,class:'plan-support'}));annotation(x+w/2,y+h/2,label,'plan-room-label');
  }
  // A single stairwell below the paired freight lifts, with a separate small lift below.
@@ -62,11 +62,9 @@ else{
  // Door centers are aligned to the corrected wall openings in this redraw.
  const doors=[
   {x:858,y:375,width:28,sliding:true,name:'前穿堂进库小门'},
-  {x:399,y:453,width:42,sliding:true,name:'西侧货梯门'},
-  {x:457,y:453,width:42,sliding:true,name:'西侧货梯门'},
-  {x:412,y:668,width:24,vertical:true,sliding:true,name:'西侧小电梯门'},
-  {x:370,y:517,width:30,vertical:true,sliding:false,name:'西侧楼梯间外门'},
-  {x:440,y:517,width:30,vertical:true,sliding:false,name:'西侧楼梯间进库门'},
+  {x:393,y:453,width:32,sliding:true,name:'西侧货梯门'},
+  {x:439,y:453,width:32,sliding:true,name:'西侧货梯门'},
+  {x:473,y:490,width:26,sliding:true,name:'西侧通道进库门'},
   {x:1426,y:430,width:48,vertical:true,sliding:true,name:'东侧平移门'},
   {x:1543,y:430,width:48,vertical:true,sliding:true,name:'东侧平移门'},
   {x:1543,y:635,width:62,vertical:true,sliding:true,name:'东侧平移门'},
