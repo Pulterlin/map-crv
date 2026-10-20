@@ -16,7 +16,6 @@ else{
  const [viewX,viewY,viewW,viewH]=plan.viewBox;
  diagram.setAttribute('viewBox',plan.viewBox.join(' '));
  diagram.classList.add('redrawn-plan');
- diagram.append(svg('path',{d:'M370 246H1543V1178H1005V1058H370Z',transform:'translate(0 20)',class:'plan-slab-side'}));
  diagram.append(svg('path',{d:'M370 246H1543V1178H1005V1058H370Z',class:'plan-slab'}));
  const annotation=(x,y,text,cls='plan-caption')=>{const node=svg('text',{x,y,class:cls});node.textContent=text;diagram.append(node);};
  annotation(390,200,'前穿堂 · 1–16号码头');
@@ -54,7 +53,6 @@ else{
  }
  // Structural partitions stay separate from functional zones; gaps represent openings.
  for(const d of ['M370 250V368H486V490H440V696H370V1058H765 M955 1058H1005V1178H1543V250','M370 250H1543','M486 375H704 M758 375H844 M872 375H960 M1000 375H1390','M1100 494H1418 M1100 494V890 M1100 920V940','M1378 660V895 M1378 925V1058','M1390 645H1543','M370 938H505 M545 938H704 M758 938H960 M1000 938H1156 M1210 938H1418 M1468 938H1543','M1426 369H1543 M1426 369V436 M1426 468V493H1543','M765 1058V995H950V1058','M1005 1058H1193 M1253 1058H1332 M1455 1058H1543']){
-  diagram.append(svg('path',{d,transform:'translate(0 12)',class:'plan-wall-side'}));
   diagram.append(svg('path',{d,class:'plan-wall'}));
  }
  // Door centers are aligned to the corrected wall openings in this redraw.
@@ -99,16 +97,15 @@ else{
  showRoute('none');
  function renderList(){const q=$('floor-search').value.trim().toLowerCase().replace(/\s+/g,'');const items=all.filter(item=>(filter==='all'||item.type===filter)&&(!q||(item.name+(item.temp||'')).toLowerCase().replace(/\s+/g,'').includes(q)));$('floor-count').textContent=items.length+'个';$('floor-list').replaceChildren();for(const item of items){const button=document.createElement('button');button.dataset.type=item.type;if(item.temp)button.dataset.temp=item.temp;button.classList.toggle('selected',selected?.id===item.id);const icon=document.createElement('span');icon.className='floor-list-icon';icon.textContent=item.type==='dock'?String(item.number):item.temp==='cold'?'冷':item.temp==='support'?'配':'恒';const copy=document.createElement('span');copy.textContent=item.name;button.append(icon,copy);button.onclick=()=>choose(item,true);$('floor-list').append(button);}}
  function choose(item,scrollTo=false){selected=item;for(const [id,node] of nodes)node.classList.toggle('selected',id===item.id);const info=$('floor-info');info.replaceChildren();const eyebrow=document.createElement('span');eyebrow.className='eyebrow';eyebrow.textContent=item.type==='dock'?'LOADING DOCK':'FUNCTIONAL ZONE';const heading=document.createElement('h2');heading.textContent=item.name;info.append(eyebrow,heading);if(item.type==='dock'){const group=document.createElement('span');group.className='floor-temp';group.textContent=item.group;const desc=document.createElement('p');desc.textContent=item.note||'码头位置依据'+plan.buildingName+'一楼平面图标注。';info.append(group,desc);}else{const temp=document.createElement('span');temp.className='floor-temp'+(item.temp==='cold'?' cold':'');temp.textContent=item.temp==='cold'?'冷藏区':item.temp==='support'?'配套区域':'恒温区';const desc=document.createElement('p');desc.textContent=item.note||'区域位置依据'+plan.buildingName+'一楼平面图绘制。';info.append(temp,desc);}if(item.photo){const photo=document.createElement('img');photo.src='./photos/'+item.photo;photo.alt=item.name+'现场参考照片';photo.loading='lazy';photo.onerror=()=>photo.remove();info.append(photo);if(item.photoNote||item.type==='dock'){const note=document.createElement('small');note.textContent=item.photoNote||'穿堂区域参考照片，非该码头单独照片。';info.append(note);}}renderList();if(scrollTo){const viewport=$('floor-viewport'),scale=diagram.clientWidth/viewW;viewport.scrollLeft=Math.max(0,(item.x-viewX+item.w/2)*scale-viewport.clientWidth/2);viewport.scrollTop=Math.max(0,(item.y-viewY+item.h/2)*scale-viewport.clientHeight/2);}}
- let pitch=0,yaw=0,panX=0,panY=0,activePointers=new Map(),gesture=null,suppressClick=false;
- function applyView(){diagram.style.setProperty('--floor-pitch',pitch+'deg');diagram.style.setProperty('--floor-yaw',yaw+'deg');diagram.style.setProperty('--floor-pan-x',panX+'px');diagram.style.setProperty('--floor-pan-y',panY+'px');$('floor-view-3d').classList.toggle('active',pitch>2);$('floor-view-top').classList.toggle('active',pitch<=2);$('floor-view-3d').setAttribute('aria-pressed',String(pitch>2));$('floor-view-top').setAttribute('aria-pressed',String(pitch<=2));}
+ let panX=0,panY=0,activePointers=new Map(),gesture=null,suppressClick=false;
+ function applyView(){diagram.style.setProperty('--floor-pan-x',panX+'px');diagram.style.setProperty('--floor-pan-y',panY+'px');}
  function setZoom(value){zoom=Math.max(.3,Math.min(2,value));diagram.style.width=Math.round(viewW*zoom)+'px';diagram.style.height=Math.round(viewH*zoom)+'px';}
- function fitZoom(){const a=yaw*Math.PI/180,p=pitch*Math.PI/180,w=Math.abs(Math.cos(a))*viewW+Math.abs(Math.sin(a))*viewH*Math.cos(p),h=Math.abs(Math.sin(a))*viewW+Math.abs(Math.cos(a))*viewH*Math.cos(p);return Math.min(viewport.clientWidth/w,viewport.clientHeight/h);}
+ function fitZoom(){return Math.min(viewport.clientWidth/viewW,viewport.clientHeight/viewH);}
  $('floor-zoom-in').onclick=()=>setZoom(zoom*1.25);$('floor-zoom-out').onclick=()=>setZoom(zoom/1.25);$('floor-fit').onclick=()=>{panX=0;panY=0;applyView();setZoom(fitZoom());};
- $('floor-view-3d').onclick=()=>{pitch=16;applyView();};$('floor-view-top').onclick=()=>{pitch=0;applyView();};$('floor-rotate').onclick=()=>{yaw=(yaw+45)%360;applyView();};
  const viewport=$('floor-viewport');
  viewport.addEventListener('pointerdown',event=>{
   activePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
-  if(activePointers.size===1){const pan=event.button===1||event.button===2||event.shiftKey;gesture={id:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,button:event.button,mode:pan?'pan':'orbit',moved:false};try{event.target.setPointerCapture(event.pointerId);}catch{}}
+  if(activePointers.size===1){gesture={id:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,button:event.button,mode:'pan',moved:false};try{event.target.setPointerCapture(event.pointerId);}catch{}}
   else if(activePointers.size===2){const points=[...activePointers.values()];gesture={mode:'pinch',distance:Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y),zoom};}
   if(event.button!==0||event.pointerType==='touch')event.preventDefault();
  });
@@ -124,12 +121,11 @@ else{
   const dx=event.clientX-gesture.lastX,dy=event.clientY-gesture.lastY;
   if(Math.hypot(event.clientX-gesture.x,event.clientY-gesture.y)>4){gesture.moved=true;viewport.classList.add('is-dragging');}
   if(gesture.moved){
-   if(gesture.mode==='pan'){panX+=dx;panY+=dy;applyView();}
-   else{yaw+=dx*.42;pitch=Math.max(0,Math.min(58,pitch+dy*.28));applyView();}
+   panX+=dx;panY+=dy;applyView();
    gesture.lastX=event.clientX;gesture.lastY=event.clientY;
   }
  });
- const endGesture=event=>{activePointers.delete(event.pointerId);if(gesture?.moved&&gesture.button===0){suppressClick=true;setTimeout(()=>{suppressClick=false;},0);}if(activePointers.size===0){gesture=null;viewport.classList.remove('is-dragging');}else if(activePointers.size===1){const [id,p]=[...activePointers.entries()][0];gesture={id,x:p.x,y:p.y,lastX:p.x,lastY:p.y,button:0,mode:'orbit',moved:true};}};
+ const endGesture=event=>{activePointers.delete(event.pointerId);if(gesture?.moved&&gesture.button===0){suppressClick=true;setTimeout(()=>{suppressClick=false;},0);}if(activePointers.size===0){gesture=null;viewport.classList.remove('is-dragging');}else if(activePointers.size===1){const [id,p]=[...activePointers.entries()][0];gesture={id,x:p.x,y:p.y,lastX:p.x,lastY:p.y,button:0,mode:'pan',moved:true};}};
  viewport.addEventListener('pointerup',endGesture);viewport.addEventListener('pointercancel',endGesture);viewport.addEventListener('contextmenu',event=>event.preventDefault());
  viewport.addEventListener('click',event=>{if(suppressClick){event.preventDefault();event.stopPropagation();suppressClick=false;}},true);
  viewport.addEventListener('wheel',event=>{event.preventDefault();setZoom(zoom*Math.exp(-event.deltaY*.001));},{passive:false});
