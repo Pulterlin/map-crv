@@ -22,9 +22,13 @@ else{
  const dockCaption=(numbers,label)=>{const group=plan.docks.filter(d=>numbers.includes(d.number));annotation(Math.min(...group.map(d=>d.x)),Math.max(...group.map(d=>d.y+d.h))+46,label);};
  dockCaption([27,28,29,30],'后穿堂 · 27–30号码头');
  dockCaption([18,19,20,21,22,23,24,25,26],'一楼外扩 · 后穿堂');
- for(const [x,y,w,h,label] of [[374,375,62,112,'楼梯'],[1426,369,112,114,'单据室'],[374,505,62,190,'楼梯'],[1484,503,55,137,'楼梯'],[965,991,136,65,'楼梯']]){
+ for(const [x,y,w,h,label] of [[374,375,50,78,'货梯'],[432,375,50,78,'货梯'],[1426,369,112,114,'单据室'],[374,495,62,140,''],[374,645,38,47,'电梯'],[1484,503,55,137,'楼梯'],[965,991,136,65,'楼梯']]){
   diagram.append(svg('rect',{x,y,width:w,height:h,rx:3,class:'plan-support'}));annotation(x+w/2,y+h/2,label,'plan-room-label');
  }
+ // A single stairwell below the paired freight lifts, with a separate small lift below.
+ annotation(405,518,'楼梯','plan-room-label');
+ for(let y=541;y<=616;y+=10)diagram.append(svg('path',{d:`M379 ${y}H431`,class:'stair-tread'}));
+ diagram.append(svg('path',{d:'M405 536V622',class:'stair-tread'}));
  for(const z of plan.zones){
   const g=svg('g',{class:'floor-zone '+z.temp,'data-id':z.id,role:'button',tabindex:'0','aria-label':z.name});
   g.append(svg('rect',{x:z.x,y:z.y,width:z.w,height:z.h,rx:6}));
@@ -52,17 +56,19 @@ else{
   const g=svg('g',{class:'floor-dock','data-id':d.id,role:'button',tabindex:'0','aria-label':d.name});g.append(svg('rect',{x:d.x,y:d.y,width:d.w,height:d.h,rx:4}));const t=svg('text',{x:d.x+d.w/2,y:d.y+d.h/2});t.textContent=d.number;g.append(t);g.addEventListener('click',()=>choose(d));g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(d);}});diagram.append(g);nodes.set(d.id,g);
  }
  // Structural partitions stay separate from functional zones; gaps represent openings.
- for(const d of ['M370 250V368H486V490H440V696H370V1058H765 M955 1058H1005V1178H1543V250','M370 250H1543','M486 375H704 M758 375H844 M872 375H960 M1000 375H1390','M1100 494H1418 M1100 494V890 M1100 920V940','M1378 660V895 M1378 925V1058','M1390 645H1543','M370 938H505 M545 938H704 M758 938H960 M1000 938H1156 M1210 938H1418 M1468 938H1543','M1426 369H1543 M1426 369V436 M1426 468V493H1543','M765 1058V995H950V1058','M1005 1058H1193 M1253 1058H1332 M1455 1058H1543']){
+ for(const d of ['M370 250V368H486V490H440V696H370V1058H765 M955 1058H1005V1178H1543V250','M370 250H1543','M370 368V696 M370 490H440 M370 640H412V696','M486 375H704 M758 375H844 M872 375H960 M1000 375H1390','M1100 494H1418 M1100 494V890 M1100 920V940','M1378 660V895 M1378 925V1058','M1390 645H1543','M370 938H505 M545 938H704 M758 938H960 M1000 938H1156 M1210 938H1418 M1468 938H1543','M1426 369H1543 M1426 369V436 M1426 468V493H1543','M765 1058V995H950V1058','M1005 1058H1193 M1253 1058H1332 M1455 1058H1543']){
   diagram.append(svg('path',{d,class:'plan-wall'}));
  }
  // Door centers are aligned to the corrected wall openings in this redraw.
  const doors=[
   {x:858,y:375,width:28,sliding:true,name:'前穿堂进库小门'},
-  {x:370,y:430,width:48,vertical:true,sliding:true,name:'西侧平移门'},
-  {x:486,y:430,width:48,vertical:true,sliding:true,name:'西侧平移门'},
+  {x:399,y:453,width:42,sliding:true,name:'西侧货梯门'},
+  {x:457,y:453,width:42,sliding:true,name:'西侧货梯门'},
+  {x:412,y:668,width:24,vertical:true,sliding:true,name:'西侧小电梯门'},
+  {x:370,y:517,width:30,vertical:true,sliding:false,name:'西侧楼梯间外门'},
+  {x:440,y:517,width:30,vertical:true,sliding:false,name:'西侧楼梯间进库门'},
   {x:1426,y:430,width:48,vertical:true,sliding:true,name:'东侧平移门'},
   {x:1543,y:430,width:48,vertical:true,sliding:true,name:'东侧平移门'},
-  {x:440,y:635,width:62,vertical:true,sliding:true,name:'西侧平移门'},
   {x:1543,y:635,width:62,vertical:true,sliding:true,name:'东侧平移门'},
   {x:1543,y:1118,width:52,vertical:true,sliding:true,name:'后穿堂东侧平移门'}
  ];
