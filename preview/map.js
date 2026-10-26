@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {buildings,places,docks,allPlaces,COLORS} from './data.js?v=20261016-1';
+import {buildings,places,docks,allPlaces,COLORS} from './data.js?v=20261026-release-2';
 
 export function createMap(container,labelLayer,onSelect){
  const scene=new THREE.Scene();scene.background=new THREE.Color('#eaf0e9');
@@ -61,8 +61,8 @@ export function createMap(container,labelLayer,onSelect){
   roof.userData.baseColor=roof.material.color.clone();
  }
  // Front canopy and the two distinct rear loading groups.
- const canopy=new THREE.MeshBasicMaterial({color:0x65db7c,toneMapped:false});box(3,.7,112,-33,5.1,0,canopy,'front');box(3,.7,51,63,5.1,-30,canopy,'rear');box(3,.7,25,33,5.1,40,canopy,'rear');
- const dockMat=new THREE.MeshBasicMaterial({color:0x65db7c,toneMapped:false});const dockStripe=mat(0xf8f4dc);
+ const canopy=new THREE.MeshBasicMaterial({color:0x83A98D,toneMapped:false});box(3,.7,112,-33,5.1,0,canopy,'front');box(3,.7,51,63,5.1,-30,canopy,'rear');box(3,.7,25,33,5.1,40,canopy,'rear');
+ const dockMat=new THREE.MeshBasicMaterial({color:0x83A98D,toneMapped:false});const dockStripe=mat(0xf8f4dc);
  for(const dock of docks){const end=dock.orientation==='end';const mesh=box(end?dock.width:dock.depth,.6,end?dock.depth:dock.width,dock.x,.92,dock.z,dockMat.clone(),dock.id);mesh.userData.baseColor=mesh.material.color.clone();for(const edge of [-1,1]){if(end)box(.18,.09,dock.depth,dock.x+edge*dock.width/2,1.28,dock.z,dockStripe);else box(dock.depth,.09,.18,dock.x,1.28,dock.z+edge*dock.width/2,dockStripe);}if(end)box(dock.width,.09,.4,dock.x,1.28,dock.z-dock.depth/2,dockStripe);else box(.4,.09,dock.width,dock.x+(dock.group==='front'?-1:1)*dock.depth/2,1.28,dock.z,dockStripe);}
  // The document room is a marked zone on A, not a detached building.
  const documentZone=box(15,.35,17,-18,24.85,-43,mat(0xe8c887),'documents');
@@ -81,7 +81,6 @@ export function createMap(container,labelLayer,onSelect){
  labelLayer.removeAttribute('aria-hidden');
  function addLabel(p,text,kind=''){const interactive=allPlaces.some(place=>place.id===p.id);const node=document.createElement(interactive?'button':'span');node.className='map-label '+kind;node.textContent=text;if(interactive){node.tabIndex=-1;node.setAttribute('aria-label',p.name||text);node.onclick=()=>onSelect(p.id);}labelLayer.append(node);labels.push({p,node,point:new THREE.Vector3(p.x,p.y||3,p.z),kind});}
  for(const id of ['a','d','office','c8','documents','wash','front','rear']){const p=places.find(p=>p.id===id);addLabel(p,p.name,p.kind==='cold'?'cold':'');}
- for(const id of ['c7','c6','c5']){const p=places.find(p=>p.id===id);addLabel(p,p.short+'号库','minor cold');}
  for(const d of docks)addLabel(d,String(d.number),'dock');
  addLabel(places.find(p=>p.id==='gate'),'西北门','gate-label');
  let active=null,transition=null,top=false,dirty=true,frame=0;
