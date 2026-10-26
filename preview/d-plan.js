@@ -1,7 +1,7 @@
 export function drawD({diagram,plan,svg,nodes,choose}){
  diagram.classList.add('d-plan');
  const text=(parent,x,y,value,cls='d-zone-text')=>{const t=svg('text',{x,y,class:cls});t.textContent=value;parent.append(t);};
- diagram.append(svg('path',{d:'M90 65H702V1190H90Z',class:'plan-slab'}));
+ diagram.append(svg('path',{d:'M90 65H702V1190H90Z',class:'plan-slab',style:'stroke:none'}));
  text(diagram,90,43,'D栋 · 冷藏库','plan-caption');
  text(diagram,702,43,'0–4℃','d-temp-caption');
  for(const z of plan.zones){

@@ -17,7 +17,7 @@ else{
  diagram.setAttribute('viewBox',plan.viewBox.join(' '));
  diagram.classList.add('redrawn-plan');
  if(building==='d'){
-  const {drawD}=await import('./d-plan.js?v=20261026-release-2');
+  const {drawD}=await import('./d-plan.js?v=20261026-release-4');
   drawD({diagram,plan,svg,nodes,choose});
  }else if(building==='c8'){
   const {drawC8}=await import('./c8-plan.js?v=20261026-release-2');
