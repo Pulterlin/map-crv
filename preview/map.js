@@ -43,7 +43,7 @@ export function createMap(container,labelLayer,onSelect){
  const lineMat=mat(0xf3f2d9);for(const x of [-246,-148,132,218])for(let z=-165;z<365;z+=21)box(.6,.05,7,x,.69,z,lineMat);for(const z of [-151,260,348])for(let x=-254;x<232;x+=21)box(7,.05,.6,x,.69,z,lineMat);
  // Street names are printed on the asphalt, with transparent backgrounds and no DOM label boxes.
  function roadName(name,x,z,vertical=false){const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=224;const ctx=canvas.getContext('2d');ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='700 155px "Microsoft YaHei","PingFang SC",sans-serif';ctx.lineJoin='round';ctx.strokeStyle='rgba(245,248,237,.82)';ctx.lineWidth=11;ctx.strokeText(name,512,112);ctx.fillStyle='#3d625c';ctx.fillText(name,512,112);const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;disposables.push(texture);const mesh=new THREE.Mesh(new THREE.PlaneGeometry(62,13),new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false,side:THREE.DoubleSide}));mesh.rotation.x=-Math.PI/2;if(vertical)mesh.rotateOnWorldAxis(new THREE.Vector3(0,1,0),Math.PI/2);mesh.position.set(x,.75,z);scene.add(mesh);}
- roadName('雪岗北路',-148,175,true);roadName('清祥路',-12,260);roadName('清祥路',-207,260);roadName('雪岗北路',-148,-117,true);
+ roadName('清祥路',-148,175,true);roadName('清祥路',-148,-117,true);
  for(const b of buildings){
   const exactAccent=['a','d'].includes(b.id)||/^c[5-8]$/.test(b.id||'');
   const accent=exactAccent?new THREE.MeshBasicMaterial({color:b.color,toneMapped:false}):mat(b.color);
