@@ -9,6 +9,8 @@ export function drawC8({diagram,plan,svg,nodes,choose}){
   g.append(svg(z.outline?'path':'rect',z.outline?{d:z.outline}:{x:z.x,y:z.y,width:z.w,height:z.h,rx:0}));
   if(z.outline){
    ['穿堂','0–4℃'].forEach((line,i)=>{const t=svg('text',{x:870,y:820+i*27,class:'c8-zone-text'});t.textContent=line;g.append(t);});
+  }else if(z.id==='c8-charging'){
+   ['叉车','充电间'].forEach((line,i)=>{const t=svg('text',{x:z.x+z.w/2,y:z.y+z.h/2+(i-.5)*36,class:'c8-charging-text'});t.textContent=line;g.append(t);});
   }else if(z.id==='c8-buffer'){
    ['收发暂存区','第三方业务','存储区'].forEach((line,i)=>{const t=svg('text',{x:z.x+z.w/2,y:z.y+z.h/2+(i-1)*26,class:'c8-zone-text'});t.textContent=line;g.append(t);});
   }else if(z.w>100){
@@ -22,6 +24,7 @@ export function drawC8({diagram,plan,svg,nodes,choose}){
   g.onclick=()=>choose(z);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(z);}};diagram.append(g);nodes.set(z.id,g);
  }
  // This clear aisle aligns with the 90-wide warehouse door and joins the cross aisle.
+ diagram.append(svg('path',{d:'M1090 578H1355V868H1090',class:'plan-wall'}));
  for(const [i,character] of ['通','道'].entries())addText(945,561+i*24,character,'c8-access-label');
  // The ramp runs right into the vestibule above C9; the warehouse entry is farther east.
  diagram.append(svg('rect',{x:550,y:758,width:100,height:47,class:'c8-ramp'}));
@@ -39,6 +42,7 @@ export function drawC8({diagram,plan,svg,nodes,choose}){
  };
  drawDoor(650,781.5,47,true,'斜坡进入穿堂的门');
  drawDoor(945,738,90,false,'穿堂进入8号库的门');
+ drawDoor(1090,810,70,true,'穿堂进入叉车充电间的门');
  for(const d of plan.docks){
   const g=svg('g',{class:'floor-dock','data-id':d.id,role:'button',tabindex:0,'aria-label':d.name});g.append(svg('rect',{x:d.x,y:d.y,width:d.w,height:d.h,rx:0}));const t=svg('text',{x:d.x+d.w/2,y:d.y+d.h/2});t.textContent=d.number;g.append(t);g.onclick=()=>choose(d);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(d);}};diagram.append(g);nodes.set(d.id,g);
  }

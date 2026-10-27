@@ -46,7 +46,8 @@ const c8Zones=[
  c8Zone('c8-work-bakery','理货作业区（烘焙）',746,85,145,280,'相邻烘焙拣货位与社超分播区合并。'),
  c8Zone('c8-buffer','收发暂存区 / 第三方业务存储区',746,475,145,250,'同一区块承担收发暂存与第三方业务存储。'),
  c8Zone('c8-bakery-east','烘焙拣货位',1010,85,65,640,'原图最右侧两排均为烘焙拣货位，合并为一个区块。'),
- {...zone('c8-vestibule','穿堂（0–4℃）','cold',665,758,410,194),lines:['穿堂','0–4℃','2个码头'],temperature:'0–4℃',outline:'M650 738H1090V868L650 983Z'}
+ {...zone('c8-vestibule','穿堂（0–4℃）','cold',665,758,410,194),lines:['穿堂','0–4℃','2个码头'],temperature:'0–4℃',outline:'M650 738H1090V868L650 983Z'},
+ zone('c8-charging','叉车充电间','support',1090,578,265,290,'位于穿堂右侧，由穿堂最右端的门进入。')
 ];
 const dZones=[
  zone('d-storage-west','冷藏存储区（西侧）','cold',110,88,82,884),
@@ -60,7 +61,7 @@ const dZones=[
 ];
 export const floorPlans={
  d:{building:'d',buildingName:'D栋',title:'D栋·冷藏库平面图',floor:'1F',subtitle:'冷藏库 0–4℃ · 穿堂 · D6 / D7 / D8 码头',viewBox:[40,20,810,1320],zones:dZones.map(z=>z.temp==='cold'?{...z,temperature:'0–4℃'}:z),docks:[6,7,8].map((n,i)=>({id:'d-dock'+n,number:'D'+n,name:'D'+n+'码头',type:'dock',group:'D栋穿堂',x:156+i*194,y:1196,w:92,h:42})),note:'依据所提供图纸的右侧冷藏库绘制；尺寸为导览示意。'},
- c8:{building:'c8',buildingName:'C栋',title:'C栋·8号库平面图',floor:'8号库',subtitle:'冷冻库 −18℃ · 穿堂 0–4℃ · C9 / C10 码头',viewBox:[25,15,1110,1030],zones:c8Zones,docks:[{id:'c9',number:'C9',name:'C9码头',type:'dock',group:'8号库穿堂',x:590,y:810,w:56,h:40},{id:'c10',number:'C10',name:'C10码头',type:'dock',group:'8号库穿堂',x:590,y:911,w:56,h:40}],note:'依据提供的分区截图与C栋图绘制；尺寸为导览示意。'},
+ c8:{building:'c8',buildingName:'C栋',title:'C栋·8号库平面图',floor:'8号库',subtitle:'冷冻库 −18℃ · 穿堂 0–4℃ · C9 / C10 码头',viewBox:[25,15,1375,1030],zones:c8Zones,docks:[{id:'c9',number:'C9',name:'C9码头',type:'dock',group:'8号库穿堂',x:590,y:810,w:56,h:40},{id:'c10',number:'C10',name:'C10码头',type:'dock',group:'8号库穿堂',x:590,y:911,w:56,h:40}],note:'依据提供的分区截图与C栋图绘制；尺寸为导览示意。'},
  a:{building:'a',buildingName:'A栋',title:'A栋·一楼功能区',floor:'1F',subtitle:'恒温 15℃ · 冷藏 −18℃ · 30个卸货码头',viewBox:[325,165,1280,1160],zones:aZones.map(z=>({...z,...(z.temp==='ambient'?{temperature:'15℃'}:z.temp==='cold'?{temperature:'−18℃'}:{})})),docks:[...frontDocks,...rearMain,...rearExtension,endDock],routes:{visitor:{name:'参观路线',path:'M1582 464 H980 V350 H731 V465 H765 V495 H530 V900 H1183 V965 H1228 V1120 H1582',start:[1582,464],end:[1582,1120]}},note:'依据一楼平面图绘制，保留库板分隔与通道；尺寸为导览示意。'}
 };
 

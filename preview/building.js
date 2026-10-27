@@ -1,4 +1,4 @@
-import {floorPlans} from './floor-data.js?v=20261026-release-2';
+import {floorPlans} from './floor-data.js?v=20261027-c8-1';
 
 const $=id=>document.getElementById(id);
 const building=new URLSearchParams(location.search).get('building')||'a';
@@ -20,7 +20,7 @@ else{
   const {drawD}=await import('./d-plan.js?v=20261026-release-4');
   drawD({diagram,plan,svg,nodes,choose});
  }else if(building==='c8'){
-  const {drawC8}=await import('./c8-plan.js?v=20261026-release-2');
+  const {drawC8}=await import('./c8-plan.js?v=20261027-c8-1');
   drawC8({diagram,plan,svg,nodes,choose});
  }else{
  diagram.append(svg('path',{d:'M370 246H1543V1178H1005V1058H370Z',class:'plan-slab'}));
@@ -101,7 +101,7 @@ else{
   diagram.append(g);
  }
  }
- if(building==='c8'){document.querySelector('.route-toolbar').hidden=true;$('floor-search').placeholder='搜索功能区或码头，如水产、C9';document.querySelector('.floor-legend').innerHTML='<span><i class="frozen"></i>冷冻区 −18℃</span><span><i class="cold"></i>穿堂 0–4℃</span><span><i class="dock"></i>卸货码头</span>';diagram.setAttribute('aria-label','C栋8号库功能区与C9、C10码头俯视平面图');}
+ if(building==='c8'){document.querySelector('.route-toolbar').hidden=true;$('floor-search').placeholder='搜索功能区或码头，如水产、C9';document.querySelector('.floor-legend').innerHTML='<span><i class="frozen"></i>冷冻区 −18℃</span><span><i class="cold"></i>穿堂 0–4℃</span><span><i class="support"></i>配套区域</span><span><i class="dock"></i>卸货码头</span>';diagram.setAttribute('aria-label','C栋8号库功能区与C9、C10码头俯视平面图');}
  if(building==='d'){
   document.querySelector('.route-toolbar').hidden=true;
   $('floor-search').placeholder='搜索功能区或码头，如退货区、D7';
@@ -128,9 +128,9 @@ else{
  function choose(item,scrollTo=false){selected=item;for(const [id,node] of nodes)node.classList.toggle('selected',id===item.id);const info=$('floor-info');info.replaceChildren();const eyebrow=document.createElement('span');eyebrow.className='eyebrow';eyebrow.textContent=item.type==='dock'?'LOADING DOCK':'FUNCTIONAL ZONE';const heading=document.createElement('h2');heading.textContent=item.name;info.append(eyebrow,heading);if(item.type==='dock'){const group=document.createElement('span');group.className='floor-temp';group.textContent=item.group;const desc=document.createElement('p');desc.textContent=item.note||'码头位置依据'+plan.buildingName+'一楼平面图标注。';info.append(group,desc);}else{const temp=document.createElement('span');temp.className='floor-temp'+(item.temp==='cold'?' cold':'');temp.textContent=item.temperature|| (item.temp==='cold'?'冷藏区':item.temp==='support'?'配套区域':item.temp==='workstation'?'工作站':'恒温区');const desc=document.createElement('p');desc.textContent=item.note||'区域位置依据'+plan.buildingName+(building==='c8'?'8号库':'一楼')+'平面图绘制。';info.append(temp,desc);}if(item.photo){const photo=document.createElement('img');photo.src='./photos/'+item.photo;photo.alt=item.name+'现场参考照片';photo.loading='lazy';photo.onerror=()=>photo.remove();info.append(photo);if(item.photoNote||item.type==='dock'){const note=document.createElement('small');note.textContent=item.photoNote||'穿堂区域参考照片，非该码头单独照片。';info.append(note);}}renderList();if(scrollTo){const viewport=$('floor-viewport'),scale=diagram.clientWidth/viewW;viewport.scrollLeft=Math.max(0,(item.x-viewX+item.w/2)*scale-viewport.clientWidth/2);viewport.scrollTop=Math.max(0,(item.y-viewY+item.h/2)*scale-viewport.clientHeight/2);}}
  let panX=0,panY=0,activePointers=new Map(),gesture=null,suppressClick=false;
  function applyView(){diagram.style.setProperty('--floor-pan-x',panX+'px');diagram.style.setProperty('--floor-pan-y',panY+'px');}
- function setZoom(value){zoom=Math.max(.3,Math.min(2,value));diagram.style.width=Math.round(viewW*zoom)+'px';diagram.style.height=Math.round(viewH*zoom)+'px';}
+ function setZoom(value){zoom=Math.max(Math.min(.3,fitZoom()),Math.min(2,value));diagram.style.width=Math.round(viewW*zoom)+'px';diagram.style.height=Math.round(viewH*zoom)+'px';}
  function fitZoom(){return Math.min(viewport.clientWidth/viewW,viewport.clientHeight/viewH);}
- $('floor-zoom-in').onclick=()=>setZoom(zoom*1.25);$('floor-zoom-out').onclick=()=>setZoom(zoom/1.25);$('floor-fit').onclick=()=>{panX=0;panY=0;applyView();setZoom(fitZoom());};
+ $('floor-zoom-in').onclick=()=>setZoom(zoom*1.25);$('floor-zoom-out').onclick=()=>setZoom(zoom/1.25);$('floor-fit').onclick=()=>{panX=0;panY=0;applyView();setZoom(fitZoom());viewport.scrollLeft=0;viewport.scrollTop=0;};
  const viewport=$('floor-viewport');
  viewport.addEventListener('pointerdown',event=>{
   activePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});

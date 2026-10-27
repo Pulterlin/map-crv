@@ -72,3 +72,5 @@ body{background:#f3f7f2}.floor-top-back{font-size:12px;font-weight:700;color:#18
 .redrawn-plan.c8-plan .floor-zone.frozen text.c8-rack-text,.redrawn-plan.c8-plan .floor-zone.frozen text.c8-zone-text{fill:#1F4082}
 .floor-board:has(.c8-plan) .floor-legend i.frozen{background:#8FA0C1;border-color:#8294B8}
 .floor-list button[data-temp=frozen] .floor-list-icon{background:#8FA0C1;color:#1F4082}
+
+.redrawn-plan.c8-plan .floor-zone .c8-charging-text{fill:#18605A;font-size:28px;font-weight:600;dominant-baseline:central}
