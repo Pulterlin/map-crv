@@ -75,12 +75,16 @@ else{
   const g=svg('g',{class:'floor-dock','data-id':d.id,role:'button',tabindex:'0','aria-label':d.name});g.append(svg('rect',{x:d.x,y:d.y,width:d.w,height:d.h,rx:4}));const t=svg('text',{x:d.x+d.w/2,y:d.y+d.h/2});t.textContent=d.number;g.append(t);g.addEventListener('click',()=>choose(d));g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(d);}});diagram.append(g);nodes.set(d.id,g);
  }
  // Structural partitions stay separate from functional zones; gaps represent openings.
- for(const d of ['M370 250V375H486 M440 490V696H370V1058H765 M1005 1058V1178H1543V250','M370 250H1543','M370 375V696 M370 640H412V696','M486 375H704 M758 375H844 M872 375H960 M1000 375H1543','M1100 494H1156 M1210 494H1418 M1100 494V890 M1100 920V940','M1378 660V895 M1378 925V1058','M1390 645H1543','M370 938H505 M545 938H704 M758 938H960 M1000 938H1156 M1210 938H1418 M1468 938H1543','M1426 375V436 M1426 468V493H1543','M765 1058V995H950','M1005 1058H1193 M1253 1058H1378 M1455 1058H1543']){
+ for(const d of ['M370 250V375H486 M440 490V696H370V1058H765 M1005 1058V1178H1543V250','M370 250H1543','M370 375V696 M370 640H412V696','M486 375H704 M758 375H844 M872 375H960 M1000 375H1543','M1100 494H1156 M1210 494H1418 M1100 494V890 M1100 920V940','M1378 660V895 M1378 925V1058','M1390 645H1543','M370 938H505 M545 938H704 M758 938H960 M1000 938H1156 M1210 938H1294 M1322 938H1418 M1468 938H1543','M1426 375V436 M1426 468V493H1543','M765 1058V995H950','M1005 1058H1193 M1253 1058H1378 M1455 1058H1543']){
   diagram.append(svg('path',{d,class:'plan-wall'}));
  }
- diagram.append(svg('path',{d:'M950 995V985H1105V1058',class:'plan-wall','data-boundary':'rear-stair'}));
+ diagram.append(svg('path',{d:'M370 490H391 M419 490H440',class:'plan-wall','data-boundary':'west-stair'}));
+ diagram.append(svg('path',{d:'M950 995V985H1019 M1047 985H1105V1058',class:'plan-wall','data-boundary':'rear-stair'}));
  // Door centers are aligned to the corrected wall openings in this redraw.
  const doors=[
+  {x:405,y:490,width:28,sliding:true,name:'西侧楼梯上方小门'},
+  {x:1033,y:985,width:28,sliding:true,name:'后穿堂楼梯上方小门'},
+  {x:1308,y:938,width:28,sliding:true,name:'理货工作站上方小门'},
   {x:731,y:375,width:54,sliding:true,name:'前穿堂西侧进库门'},
   {x:980,y:375,width:40,sliding:true,name:'前穿堂东侧进库门'},
   {x:525,y:938,width:40,sliding:true,name:'后穿堂西一进库门'},
