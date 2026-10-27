@@ -1,4 +1,4 @@
-import {floorPlans} from './floor-data.js?v=20261027-c8-1';
+import {floorPlans} from './floor-data.js?v=20261027-a-codes-4';
 
 const $=id=>document.getElementById(id);
 const building=new URLSearchParams(location.search).get('building')||'a';
@@ -11,7 +11,7 @@ if(!plan){$('floor-title').textContent='暂未提供该栋平面图';$('floor-su
 else{
  document.title=plan.title+'·深圳生鲜配送中心';
  $('building-crumb').textContent=plan.buildingName;$('floor-crumb').textContent=plan.floor;$('floor-title').textContent=plan.title;$('floor-subtitle').textContent=plan.subtitle;$('floor-badge').textContent=plan.floor;$('floor-board-title').textContent=plan.buildingName+(building==='c8'?'·8号库':plan.floor);$('floor-note').textContent=plan.note;
- const all=[...plan.zones,...plan.docks],nodes=new Map();let selected=null,filter='all',zoom=1;
+ const all=[...plan.zones,...plan.docks,...(plan.doors||[])],nodes=new Map();let selected=null,filter='all',zoom=1;
  const diagram=$('floor-svg');
  const [viewX,viewY,viewW,viewH]=plan.viewBox;
  diagram.setAttribute('viewBox',plan.viewBox.join(' '));
@@ -72,52 +72,40 @@ else{
   g.addEventListener('click',()=>choose(z));g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(z);}});diagram.append(g);nodes.set(z.id,g);
  }
  for(const d of plan.docks){
-  const g=svg('g',{class:'floor-dock','data-id':d.id,role:'button',tabindex:'0','aria-label':d.name});g.append(svg('rect',{x:d.x,y:d.y,width:d.w,height:d.h,rx:4}));const t=svg('text',{x:d.x+d.w/2,y:d.y+d.h/2});t.textContent=d.number;g.append(t);g.addEventListener('click',()=>choose(d));g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(d);}});diagram.append(g);nodes.set(d.id,g);
+  const g=svg('g',{class:'floor-dock','data-id':d.id,role:'button',tabindex:'0','aria-label':d.name});g.append(svg('rect',{x:d.x,y:d.y,width:d.w,height:d.h,rx:4}));const t=svg('text',{x:d.x+d.w/2,y:d.y+d.h/2});t.textContent=d.code||d.number;if(d.code)t.setAttribute('class','a-dock-code');g.append(t);g.addEventListener('click',()=>choose(d));g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(d);}});diagram.append(g);nodes.set(d.id,g);
  }
  // Structural partitions stay separate from functional zones; gaps represent openings.
- for(const d of ['M370 250V375H486 M440 490V696H370V1058H765 M1005 1058V1178H1543V250','M370 250H1543','M370 375V696 M370 640H412V696','M486 375H704 M758 375H844 M872 375H960 M1000 375H1543','M1100 494H1156 M1210 494H1418 M1100 494V890 M1100 920V940','M1378 660V895 M1378 925V1058','M1390 645H1543','M370 938H505 M545 938H704 M758 938H960 M1000 938H1156 M1210 938H1294 M1322 938H1418 M1468 938H1543','M1426 375V436 M1426 468V493H1543','M765 1058V995H950','M1005 1058H1193 M1253 1058H1328 M1455 1058H1543']){
+ for(const d of ['M370 250V318 M370 362V375H486 M440 490V696H370V1003 M370 1047V1058H765 M1005 1058V1178H1543V250','M370 250H1543','M370 375V696 M370 640H412V696','M486 375H717 M745 375H844 M872 375H960 M1000 375H1543','M1100 494H1156 M1210 494H1418 M1100 494V890 M1100 920V940','M1378 660V895 M1378 925V1058','M1390 645H1543','M370 938H505 M545 938H704 M758 938H1156 M1210 938H1294 M1322 938H1418 M1468 938H1543','M1426 375V416 M1426 444V493H1543','M765 1058V995H950','M1005 1058H1193 M1253 1058H1328 M1455 1058H1543']){
   diagram.append(svg('path',{d,class:'plan-wall'}));
  }
  diagram.append(svg('path',{d:'M370 490H391 M419 490H440',class:'plan-wall','data-boundary':'west-stair'}));
  diagram.append(svg('path',{d:'M950 995V985H1019 M1047 985H1105V1058',class:'plan-wall','data-boundary':'rear-stair'}));
- // Door centers are aligned to the corrected wall openings in this redraw.
- const doors=[
-  {x:405,y:490,width:28,sliding:true,name:'西侧楼梯上方小门'},
-  {x:1033,y:985,width:28,sliding:true,name:'后穿堂楼梯上方小门'},
-  {x:1308,y:938,width:28,sliding:true,name:'理货工作站上方小门'},
-  {x:731,y:375,width:54,sliding:true,name:'前穿堂西侧进库门'},
-  {x:980,y:375,width:40,sliding:true,name:'前穿堂东侧进库门'},
-  {x:525,y:938,width:40,sliding:true,name:'后穿堂西一进库门'},
-  {x:731,y:938,width:54,sliding:true,name:'后穿堂西二进库门'},
-  {x:980,y:938,width:40,sliding:true,name:'后穿堂中部进库门'},
-  {x:1183,y:938,width:54,sliding:true,name:'后穿堂冷藏区进库门'},
-  {x:1443,y:938,width:50,sliding:true,name:'后穿堂东侧进库门'},
-  {x:1100,y:905,width:30,vertical:true,sliding:true,name:'冷藏区西侧通道门'},
-  {x:1378,y:910,width:30,vertical:true,sliding:true,name:'冷藏区东侧通道门'},
-  {x:1183,y:494,width:54,sliding:true,name:'冷藏区前穿堂进库门'},
-  {x:858,y:375,width:28,sliding:true,name:'前穿堂进库小门'},
-  {x:370,y:473,width:28,vertical:true,sliding:true,name:'西侧通道外门'},
-  {x:1426,y:430,width:48,vertical:true,sliding:true,name:'东侧平移门'},
-  {x:1543,y:430,width:48,vertical:true,sliding:true,name:'东侧平移门'},
-  {x:1543,y:635,width:62,vertical:true,sliding:true,name:'东侧平移门'},
-  {x:1543,y:1118,width:52,vertical:true,sliding:true,name:'后穿堂东侧平移门'}
- ];
- for(const door of doors){
-  const g=svg('g',{class:'plan-door',transform:'translate('+door.x+' '+door.y+')'+(door.vertical?' rotate(90)':''),role:'img','aria-label':door.name});
-  const title=svg('title');title.textContent=door.name;g.append(title);
-  const half=(door.width||38)/2;
-  g.append(svg('rect',{x:-half,y:-8,width:half*2,height:20,fill:'#fafbf7'}));
-  if(door.sliding){
+ // Warehouse doors have blue numbered badges; safety doors use a hinged symbol.
+ for(const door of plan.doors){
+  const feature=svg('g',{class:'door-feature','data-id':door.id,'data-door-code':door.code||'',role:'button',tabindex:0,'aria-label':door.name});
+  const g=svg('g',{class:'plan-door '+door.doorType+'-door',transform:`translate(${door.x} ${door.y})${door.vertical?' rotate(90)':''}`,role:'img','aria-label':door.name});
+  const half=door.width/2;
+  g.append(svg('rect',{x:-half,y:-8,width:door.width,height:20,fill:'#FAFBF7'}));
+  if(door.doorType==='warehouse'){
    g.append(svg('path',{d:`M${-half} -6H${half} M${-half} 6H${half}`,class:'door-track'}));
    g.append(svg('path',{d:`M${-half} 0H-2 M2 2H${half}`,class:'door-leaf'}));
    g.append(svg('path',{d:`M${-half+7} -3L${-half+3} 0L${-half+7} 3 M${half-7} -1L${half-3} 2L${half-7} 5`,class:'door-track'}));
   }else{
-   g.append(svg('path',{d:'M-18 0V-18 M18 0V-18',class:'door-leaf'}));
-   g.append(svg('path',{d:'M-18 -18A18 18 0 0 1 0 0 M18 -18A18 18 0 0 0 0 0',class:'door-swing'}));
+   g.append(svg('path',{d:'M-14 0H-10 M10 0H14 M-10 0V-20',class:'safety-leaf'}));
+   g.append(svg('path',{d:'M-10 -20C1.05 -20 10 -11.05 10 0',class:'safety-swing'}));
   }
-  diagram.append(g);
+  feature.append(g);
+  if(door.code){
+   const tag=svg('g',{class:'warehouse-door-tag'});
+   tag.append(svg('rect',{x:door.labelX-32,y:door.labelY-13,width:64,height:26,rx:0}));
+   const t=svg('text',{x:door.labelX,y:door.labelY});t.textContent=door.code;tag.append(t);feature.append(tag);
+  }
+  feature.onclick=()=>choose(door);feature.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(door);}};
+  diagram.append(feature);nodes.set(door.id,feature);
  }
+
  }
+ if(building==='a'){document.querySelector('.floor-legend').innerHTML='<span><i class="ambient"></i>恒温区</span><span><i class="cold"></i>冷藏区</span><span><i class="support"></i>配套区域</span><span><i class="dock"></i>卸货码头 A01–A30</span><span><i class="warehouse-door"></i>库门 W01–W13</span><span><i class="safety-door"></i>安全门</span><span><i class="workstation"></i>工作站</span>';}
  if(building==='c8'){document.querySelector('.route-toolbar').hidden=true;$('floor-search').placeholder='搜索功能区或码头，如水产、C9';document.querySelector('.floor-legend').innerHTML='<span><i class="frozen"></i>冷冻区 −18℃</span><span><i class="cold"></i>穿堂 0–4℃</span><span><i class="support"></i>配套区域</span><span><i class="dock"></i>卸货码头</span>';diagram.setAttribute('aria-label','C栋8号库功能区与C9、C10码头俯视平面图');}
  if(building==='d'){
   document.querySelector('.route-toolbar').hidden=true;
@@ -141,8 +129,8 @@ else{
  }
  for(const [key,label] of [...routeKinds,['none','关闭']]){const button=document.createElement('button');button.type='button';button.textContent=label;button.setAttribute('aria-pressed','false');button.onclick=()=>showRoute(key);$('route-options').append(button);routeButtons.set(key,button);}
  showRoute('none');
- function renderList(){const q=$('floor-search').value.trim().toLowerCase().replace(/\s+/g,'');const items=all.filter(item=>(filter==='all'||item.type===filter)&&(!q||(item.name+(item.temp||'')).toLowerCase().replace(/\s+/g,'').includes(q)));$('floor-count').textContent=items.length+'个';$('floor-list').replaceChildren();for(const item of items){const button=document.createElement('button');button.dataset.type=item.type;if(item.temp)button.dataset.temp=item.temp;button.classList.toggle('selected',selected?.id===item.id);const icon=document.createElement('span');icon.className='floor-list-icon';icon.textContent=item.type==='dock'?String(item.number):item.temp==='cold'?'冷':item.temp==='support'?'配':item.temp==='workstation'?'工':item.temp==='frozen'?'冻':'恒';const copy=document.createElement('span');copy.textContent=item.name;button.append(icon,copy);button.onclick=()=>choose(item,true);$('floor-list').append(button);}}
- function choose(item,scrollTo=false){selected=item;for(const [id,node] of nodes)node.classList.toggle('selected',id===item.id);const info=$('floor-info');info.replaceChildren();const eyebrow=document.createElement('span');eyebrow.className='eyebrow';eyebrow.textContent=item.type==='dock'?'LOADING DOCK':'FUNCTIONAL ZONE';const heading=document.createElement('h2');heading.textContent=item.name;info.append(eyebrow,heading);if(item.type==='dock'){const group=document.createElement('span');group.className='floor-temp';group.textContent=item.group;const desc=document.createElement('p');desc.textContent=item.note||'码头位置依据'+plan.buildingName+'一楼平面图标注。';info.append(group,desc);}else{const temp=document.createElement('span');temp.className='floor-temp'+(item.temp==='cold'?' cold':'');temp.textContent=item.temperature|| (item.temp==='cold'?'冷藏区':item.temp==='support'?'配套区域':item.temp==='workstation'?'工作站':'恒温区');const desc=document.createElement('p');desc.textContent=item.note||'区域位置依据'+plan.buildingName+(building==='c8'?'8号库':'一楼')+'平面图绘制。';info.append(temp,desc);}if(item.photo){const photo=document.createElement('img');photo.src='./photos/'+item.photo;photo.alt=item.name+'现场参考照片';photo.loading='lazy';photo.onerror=()=>photo.remove();info.append(photo);if(item.photoNote||item.type==='dock'){const note=document.createElement('small');note.textContent=item.photoNote||'穿堂区域参考照片，非该码头单独照片。';info.append(note);}}renderList();if(scrollTo){const viewport=$('floor-viewport'),scale=diagram.clientWidth/viewW;viewport.scrollLeft=Math.max(0,(item.x-viewX+item.w/2)*scale-viewport.clientWidth/2);viewport.scrollTop=Math.max(0,(item.y-viewY+item.h/2)*scale-viewport.clientHeight/2);}}
+ function renderList(){const q=$('floor-search').value.trim().toLowerCase().replace(/\s+/g,'');const items=all.filter(item=>(filter==='all'||item.type===filter)&&(!q||(item.name+(item.temp||'')).toLowerCase().replace(/\s+/g,'').includes(q)));$('floor-count').textContent=items.length+'个';$('floor-list').replaceChildren();for(const item of items){const button=document.createElement('button');button.dataset.type=item.type;if(item.temp)button.dataset.temp=item.temp;button.classList.toggle('selected',selected?.id===item.id);const icon=document.createElement('span');icon.className='floor-list-icon';icon.textContent=item.type==='door'?(item.code||'安'):item.type==='dock'?String(item.code||item.number):item.temp==='cold'?'冷':item.temp==='support'?'配':item.temp==='workstation'?'工':item.temp==='frozen'?'冻':'恒';const copy=document.createElement('span');copy.textContent=item.name;button.append(icon,copy);button.onclick=()=>choose(item,true);$('floor-list').append(button);}}
+ function choose(item,scrollTo=false){selected=item;for(const [id,node] of nodes)node.classList.toggle('selected',id===item.id);const info=$('floor-info');info.replaceChildren();const eyebrow=document.createElement('span');eyebrow.className='eyebrow';eyebrow.textContent=item.type==='door'?'DOOR':item.type==='dock'?'LOADING DOCK':'FUNCTIONAL ZONE';const heading=document.createElement('h2');heading.textContent=item.name;info.append(eyebrow,heading);if(item.type==='door'){const kind=document.createElement('span');kind.className='floor-temp';kind.textContent=item.doorType==='warehouse'?'库门':'安全门';const desc=document.createElement('p');desc.textContent=item.note;info.append(kind,desc);}else if(item.type==='dock'){const group=document.createElement('span');group.className='floor-temp';group.textContent=item.group;const desc=document.createElement('p');desc.textContent=item.note||'码头位置依据'+plan.buildingName+'一楼平面图标注。';info.append(group,desc);}else{const temp=document.createElement('span');temp.className='floor-temp'+(item.temp==='cold'?' cold':'');temp.textContent=item.temperature|| (item.temp==='cold'?'冷藏区':item.temp==='support'?'配套区域':item.temp==='workstation'?'工作站':'恒温区');const desc=document.createElement('p');desc.textContent=item.note||'区域位置依据'+plan.buildingName+(building==='c8'?'8号库':'一楼')+'平面图绘制。';info.append(temp,desc);}if(item.photo){const photo=document.createElement('img');photo.src='./photos/'+item.photo;photo.alt=item.name+'现场参考照片';photo.loading='lazy';photo.onerror=()=>photo.remove();info.append(photo);if(item.photoNote||item.type==='dock'){const note=document.createElement('small');note.textContent=item.photoNote||'穿堂区域参考照片，非该码头单独照片。';info.append(note);}}renderList();if(scrollTo){const viewport=$('floor-viewport'),scale=diagram.clientWidth/viewW;viewport.scrollLeft=Math.max(0,(item.x-viewX+item.w/2)*scale-viewport.clientWidth/2);viewport.scrollTop=Math.max(0,(item.y-viewY+item.h/2)*scale-viewport.clientHeight/2);}}
  let panX=0,panY=0,activePointers=new Map(),gesture=null,suppressClick=false;
  function applyView(){diagram.style.setProperty('--floor-pan-x',panX+'px');diagram.style.setProperty('--floor-pan-y',panY+'px');}
  function setZoom(value){zoom=Math.max(Math.min(.3,fitZoom()),Math.min(2,value));diagram.style.width=Math.round(viewW*zoom)+'px';diagram.style.height=Math.round(viewH*zoom)+'px';}

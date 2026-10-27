@@ -74,3 +74,13 @@ body{background:#f3f7f2}.floor-top-back{font-size:12px;font-weight:700;color:#18
 .floor-list button[data-temp=frozen] .floor-list-icon{background:#8FA0C1;color:#1F4082}
 
 .redrawn-plan.c8-plan .floor-zone .c8-charging-text{fill:#18605A;font-size:28px;font-weight:600;dominant-baseline:central}
+.door-feature{cursor:pointer;outline:none}
+.warehouse-door-tag rect{fill:#1F4082;stroke:#FFFFFF;stroke-width:1.5}
+.warehouse-door-tag text{fill:#FFFFFF;font-size:19px;font-weight:700;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.door-feature:hover .warehouse-door-tag rect,.door-feature.selected .warehouse-door-tag rect,.door-feature:focus-visible .warehouse-door-tag rect{stroke:#1F4082;stroke-width:3}
+.safety-leaf,.safety-swing{fill:none;stroke:#18605A;stroke-width:2}
+.door-feature.selected .safety-leaf,.door-feature.selected .safety-swing{stroke:#1F4082;stroke-width:3}
+.redrawn-plan .floor-dock .a-dock-code{font-size:16px;letter-spacing:0}
+.floor-legend i.warehouse-door{background:#1F4082;border-radius:0}
+.floor-legend i.safety-door{background:transparent;border-left:2px solid #18605A;border-bottom:2px solid #18605A;border-radius:0}
+.floor-list button[data-type=door] .floor-list-icon{background:#E8EDF5;color:#1F4082}
